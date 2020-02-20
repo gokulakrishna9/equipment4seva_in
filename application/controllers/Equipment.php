@@ -7,18 +7,12 @@ class Equipment extends CI_Controller {
       $this->$method();
     } else {
       $this->default_handler();
+      return;
     }
     $data = array();
-    $data['components'] = array();
-    $data['components']['common/header'] = array();
-    $data['components']['common/left_nav'] = array(
-      'left_nav' => [
-        'Equipment' => 'url',
-        'Equipment Accessory' => 'url',
-        'Maintenance Contract' => 'url',
-        'Service Record' => 'url'
-      ]
-    );
+    $data = array();
+    $data['header'] = 'Equipment';
+    $data['leftNav'] = 'current_left_nav';
     $data['components']['forms/equipment'] = array();  // forms data
     $this->load->view('container/default_container', $data);
     // Common UI
@@ -29,15 +23,17 @@ class Equipment extends CI_Controller {
   }
 
   function update_equipment(){
-
+    // Set hidden record ID
+    // Return data with route
   }
 
   function view_equipment(){
-
+    // Modal with View, Update, Delete buttons
+    // Return data with route
   }
 
   function delete_equipment(){
-
+    // Delete record
   }
 
   function default_handler(){

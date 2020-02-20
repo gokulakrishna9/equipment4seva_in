@@ -5,10 +5,6 @@ $frm_opn = form_open('equipment/'.$action, $form_attributes);
 $frm_cls = form_close();
 $equipment_type_options = array();  // selected
 ?>
-<div style="margin-left:15%" class="">
-  &nbsp;
-</div>
-<div style="margin-left:15%" class="">
 <?php echo $frm_opn; ?>
 <div class="w3-row">
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
@@ -68,31 +64,26 @@ $equipment_type_options = array();  // selected
 </div>
 <div class="w3-row">
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Supplier ID:</b></label>
+    <label class=""><b>Supply Date:</b></label>
     <input class="w3-input w3-border" type="text" name="supply_date"></input>
   </div>
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Invoice Number:</b></label>
+    <label class=""><b>Installation Date:</b></label>
     <input class="w3-input w3-border" type="text" name="installation_date"></input>
   </div>
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Invoice Date:</b></label>
-    <input class="w3-input w3-border" type="text" name="warranty_start_date"></input>
+    <label class=""><b>Equipment Status:</b></label>
+    <input class="w3-input w3-border" type="text" name="equipment_status_id"></input>
   </div>
 </div>
 <div class="w3-row">
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Supplier ID:</b></label>
+    <label class=""><b>Warranty Start Date:</b></label>
     <input class="w3-input w3-border" type="text" name="warranty_start_date"></input>
   </div>
   <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Invoice Number:</b></label>
+    <label class=""><b>Warranty End Date:</b></label>
     <input class="w3-input w3-border" type="text" name="warranty_end_date"></input>
-  </div>
-  <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-    <label class=""><b>Invoice Date:</b></label>
-    <input class="w3-input w3-border" type="text" name="equipment_status_id"></input>
   </div>
 </div>
 <?php echo $frm_cls; ?>
-</div>
