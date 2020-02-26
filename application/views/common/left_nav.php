@@ -3,8 +3,8 @@
     'Equipment' => [
       'Equipment' => 'url',
       'Equipment Accessory' => 'url',
+      'Service Record' => 'url',
       'Maintenance Contract' => 'url',
-      'Service Record' => 'url'
     ]
   );
 ?>
