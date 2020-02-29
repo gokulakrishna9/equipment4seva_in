@@ -5,26 +5,41 @@ class Equipment extends CI_Controller {
   public function _remap($method){
     // Authentication, Authorization
     $this->data = array();
+    $this->load_defaults();
     if(method_exists($this, $method)){
-      $this->data['form_action'] = 'add_equipment';
       $this->$method();
     } else {
       $this->default_handler();
       return;
     }
-    $this->load->model('equipment_type');
-    $this->load->model('donor');
-    $this->load->model('procured_by');
-    $this->load->model('supplier');
-    $this->data['equipment_types'] = $this->equipment_type->get_equipment_type();
-    $this->data['donors'] = $this->donor->get_donors();
-    $this->data['procured_by'] = $this->procured_by->get_procured_by();
-    $this->data['supplier'] = $this->supplier->get_supplier();
-    $this->data['header'] = 'equipment';
-    $this->data['leftNav'] = 'equipment';
     $this->data['components']['forms/equipment'] = array();  // forms data
     $this->load->view('container/default_container', $this->data);
     // Common UI
+  }
+
+  private function authenticate_user(){
+
+  }
+
+  private function authorize_user(){
+
+  }
+
+  private function load_defaults(){
+    $this->load->model('equipment_model');
+    $this->load->model('equipment_type');
+    $this->load->model('equipment_status_type');
+    $this->load->model('donor');
+    $this->load->model('vendor');
+    
+    $this->data['equipment'] = $this->equipment_model->get_equipment();
+    $this->data['equipment_types'] = $this->equipment_type->get_equipment_type();
+    $this->data['equipment_status_types'] = $this->equipment_status_type->get_equipment_status_type();
+    $this->data['donors'] = $this->donor->get_donors();
+    $this->data['vendor'] = $this->vendor->get_vendor();
+    $this->data['header'] = 'equipment';
+    $this->data['leftNav'] = 'equipment';
+    $this->data['form_action'] = 'equipment/add_update_equipment';
   }
 
   function index(){
@@ -32,18 +47,12 @@ class Equipment extends CI_Controller {
     // Return data with route
   }
 
-  function add_equipment(){
-    // return UI component => data
-    
+  function add_update_equipment(){
+    $this->equipment_model->add_update_equipment();
   }
 
   function get_equipment(){
-    $this->data['form_action'] = 'add_equipment';
-  }
-
-  function update_equipment(){
-    // Set hidden record ID
-    // Return data with route
+    $this->data['update_data'] = $this->equipment_model->get_equipment(true);
   }
 
   function delete_equipment(){

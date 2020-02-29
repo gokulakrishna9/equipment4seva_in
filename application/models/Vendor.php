@@ -1,8 +1,8 @@
 <?php
-class Supplier extends CI_Model {
-  function get_supplier(){
+class Vendor extends CI_Model {
+  function get_vendor(){
     $this->db->select("*")
-      ->from('supplier');
+      ->from('vendor');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
