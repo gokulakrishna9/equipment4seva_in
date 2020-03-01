@@ -3,6 +3,11 @@
 <title>W3.CSS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?php echo base_url();?>assets\css_lib\w3.css">
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
 <style>
     .navbar {
         position: fixed;
@@ -24,8 +29,31 @@
         &nbsp;
     </div>
     <!-- Form -->
-    <div style="margin-left:15%" class="">
-        <?php $this->load->view('form/equipment', $header); ?>
+    <div style="margin-left:15%" class="w3-container">
+        <?php 
+        $form_attributes = array('action'=> 'post', 'class' => 'w3-container', 'id' => 'equipment_form');
+        $frm_opn = form_open($form_action, $form_attributes);
+        $frm_cls = form_close();
+        $button_data = array(
+            'name' => 'equipment',
+            'id' => 'equipment',
+            'type' => 'submit',
+            'class' => 'w3-right w3-teal w3-button'
+        );
+        echo $frm_opn;
+        echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data));
+        ?>
+        <div class="w3-row">
+            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
+            </div>
+            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom"></div>
+            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom w3-margin-top">
+                <?php echo form_button($button_data, 'Save'); ?>
+            </div>
+        </div>
+        <?php
+        echo $frm_cls;
+        ?>
     </div>
     <!-- Table -->
     <div style="margin-left:15%;overflow:auto;" class="w3-container">
