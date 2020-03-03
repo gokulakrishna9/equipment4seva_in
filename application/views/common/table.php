@@ -30,5 +30,5 @@
     'table_close'           => '</table>'
   );
   $this->table->set_template($template);
-  echo $this->table->generate($this->format_data->format_table_data($equipment, 'equipment/update_equipment?equipment_id=', 'equipment_id'));
+  echo $this->table->generate($this->format_data->format_table_data($equipment, 'equipment/get_equipment?equipment_id=', 'equipment_id'));
 ?>

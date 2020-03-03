@@ -30,9 +30,7 @@ class Equipment_model extends CI_Model {
     return $this->equipment_form_fields;
   }
 
-  function get_equipment($apply_filter=false){
-    if($apply_filter && $this->input->get('equipment_id'))
-      $this->db->where('equipment.equipment_id', $this->input->get('equipment_id'));
+  function get_equipment(){
     $this->db->select("equipment_id, equipment_type, manufac.vendor_name, eq_name, model, serial_number, mac_address, asset_number, donor_name, proc.vendor_name, purchase_order_date, cost, supp.vendor_name, invoice_number, invoice_date, supply_date, installation_date, warranty_start_date, warranty_end_date, equipment_status_type")
       ->from('equipment')
       ->join('equipment_type', 'equipment_type.equipment_type_id = equipment.equipment_type_id', 'left')
@@ -45,6 +43,16 @@ class Equipment_model extends CI_Model {
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
+  }
+
+  function get_equipment_record(){
+    if($this->input->get('equipment_id'))
+      $this->db->where('equipment.equipment_id', $this->input->get('equipment_id'));
+    $this->db->select("*")
+    ->from('equipment');
+    $qry = $this->db->get();
+    $rslts = $qry->result();
+    return $rslts[0];
   }
 
   function add_update_equipment(){

@@ -30,7 +30,8 @@
     </div>
     <!-- Form -->
     <div style="margin-left:15%" class="w3-container">
-        <?php 
+        <?php
+        $update_data = isset($update_data) ? $update_data : '';
         $form_attributes = array('action'=> 'post', 'class' => 'w3-container', 'id' => 'equipment_form');
         $frm_opn = form_open($form_action, $form_attributes);
         $frm_cls = form_close();
@@ -41,7 +42,7 @@
             'class' => 'w3-right w3-teal w3-button'
         );
         echo $frm_opn;
-        echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data));
+        echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data, (array)$update_data));
         ?>
         <div class="w3-row">
             <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">

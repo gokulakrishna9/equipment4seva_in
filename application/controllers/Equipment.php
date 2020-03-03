@@ -61,7 +61,7 @@ class Equipment extends CI_Controller {
   }
 
   function get_equipment(){
-    $this->data['update_data'] = $this->equipment_model->get_equipment(true);
+    $this->data['update_data'] = $this->equipment_model->get_equipment_record();
   }
 
   function delete_equipment(){
