@@ -4,86 +4,67 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
-
-	<style type="text/css">
-
-	::selection { background-color: #E13300; color: white; }
-	::-moz-selection { background-color: #E13300; color: white; }
-
-	body {
-		background-color: #fff;
-		margin: 40px;
-		font: 13px/20px normal Helvetica, Arial, sans-serif;
-		color: #4F5155;
-	}
-
-	a {
-		color: #003399;
-		background-color: transparent;
-		font-weight: normal;
-	}
-
-	h1 {
-		color: #444;
-		background-color: transparent;
-		border-bottom: 1px solid #D0D0D0;
-		font-size: 19px;
-		font-weight: normal;
-		margin: 0 0 14px 0;
-		padding: 14px 15px 10px 15px;
-	}
-
-	code {
-		font-family: Consolas, Monaco, Courier New, Courier, monospace;
-		font-size: 12px;
-		background-color: #f9f9f9;
-		border: 1px solid #D0D0D0;
-		color: #002166;
-		display: block;
-		margin: 14px 0 14px 0;
-		padding: 12px 10px 12px 10px;
-	}
-
-	#body {
-		margin: 0 15px 0 15px;
-	}
-
-	p.footer {
-		text-align: right;
-		font-size: 11px;
-		border-top: 1px solid #D0D0D0;
-		line-height: 32px;
-		padding: 0 10px 0 10px;
-		margin: 20px 0 0 0;
-	}
-
-	#container {
-		margin: 10px;
-		border: 1px solid #D0D0D0;
-		box-shadow: 0 0 8px #D0D0D0;
-	}
+	<title>Welcome to Equipment For Seva</title>
+	<link rel="stylesheet" href="<?php echo base_url();?>assets\css_lib\w3.css">
+	<style>
+		.empty-div {
+      height: 2cm;
+		}
 	</style>
 </head>
 <body>
-
-<div id="container">
-	<h1>Welcome to CodeIgniter!</h1>
-
-	<div id="body">
-		<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
-
-		<p>If you would like to edit this page you'll find it located at:</p>
-		<code>application/views/welcome_message.php</code>
-
-		<p>The corresponding controller for this page is found at:</p>
-		<code>application/controllers/Welcome.php</code>
-
-		<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
-	</div>
-
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+<div class="w3-row">
+   <div class="w3-col m12 w3-light-green">
+    <h3 class='w3-margin-left'>Equipment For Seva</h3>
+   </div> 
 </div>
-
+<div class="w3-row">
+  <div class="w3-col m6 l4">
+    &nbsp;
+  </div>
+  <div class="w3-col m6 l4">
+    <div class="w3-card w3-light-grey">
+      <h5 class="w3-center">Login</h5>
+      <h5 class='w3-lite-red'><?php echo isset($error_message) ? $error_message : ''; ?></h5>
+    </div>
+    <?php 
+    $form_action = 'welcome/authenticate_user';
+      $form_attributes = array('action'=> 'post', 'class' => 'w3-container', 'id' => 'equipment_form');
+      $frm_opn = form_open($form_action, $form_attributes);
+      $frm_cls = form_close();
+      $button_data = array(
+          'name' => 'equipment',
+          'id' => 'equipment',
+          'type' => 'submit',
+          'class' => "w3-btn w3-blue w3-right"
+      );
+      echo $frm_opn;
+    ?>
+      <div class="w3-margin-bottom">
+        <label class="w3-text-blue"><b>User Name:</b></label>
+        <input class="w3-input w3-border" name='user_name' type="text" required>
+      </div>
+      <div class="w3-margin-bottom">
+        <label class="w3-text-blue"><b>Password:</b></label>
+        <input class="w3-input w3-border" name='password' type="password" required>
+      </div>
+      <div class="w3-row">
+        <div class="w3-col m4">
+          <br>
+          <?php echo $captcha_image; ?>
+        </div>
+        <div class="w3-col m8">
+          <label class="w3-text-blue"><b>Captcha:</b></label>
+          <input class="w3-input w3-border" type="text" name="captcha" required>
+        </div>
+      </div>    
+      <br>
+    <?php echo form_button($button_data, 'Login'); ?>
+    <?php echo $frm_cls; ?>
+  </div>
+  <div class="w3-col m6 l4">
+    &nbsp;
+  </div>
+</div>
 </body>
 </html>

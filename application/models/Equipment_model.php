@@ -1,6 +1,6 @@
 <?php
 class Equipment_model extends CI_Model {
-  // label, html_element, type, ... 
+  // label, html_element, {type | master_value_field, master label field}, ... 
   private $equipment_form_fields = array(
     'equipment_id'	=> array('', 'input', 'hidden'),
     'equipment_type_id'	=> array('Equipment Type', 'select', 'equipment_type_id', 'equipment_type'),
