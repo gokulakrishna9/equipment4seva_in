@@ -6,6 +6,8 @@ class Format_data {
     $table_rows = array();
     $header = array();
     $header[] = 'Update';
+    if(!$table_data)
+      return;
     foreach($table_data[0] as $key => $value){
       $header[] = ucwords(str_replace('_', ' ', $key));
     }

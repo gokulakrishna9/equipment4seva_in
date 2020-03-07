@@ -5,7 +5,7 @@ class Equipment extends CI_Controller {
   public function _remap($method){
     // Authentication, Authorization
     $this->data = array();
-    $this->data['route'] = 'equipment';
+    $this->data['header'] = 'equipment';
     $this->data['form_action'] = 'equipment/add_update_equipment';
     $this->load->model('equipment_model');
     $this->load->model('equipment_type');
@@ -33,9 +33,13 @@ class Equipment extends CI_Controller {
   }
 
   private function load_defaults(){    
+    //<<-- View Data -->>
+    $this->data['total_rows'] = $this->equipment_model->count_all(); 
     $this->data['equipment'] = $this->equipment_model->get_equipment();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_model->get_equipment_form_fields();
+    $this->data['key_field'] = 'equipment_id';
+    $this->data['table_operator'] ='equipment/get_equipment?equipment_id=';
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Masters -->>

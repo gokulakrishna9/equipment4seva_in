@@ -29,6 +29,15 @@
 
     'table_close'           => '</table>'
   );
+   //total_rows
+  // Add pagination
+  $config['base_url'] = base_url();
+  $config['total_rows'] = 20;
+  $config['per_page'] = 10;
+  $this->pagination->initialize($config);
+  echo $this->pagination->create_links();
+
+  // Build Table
   $this->table->set_template($template);
-  echo $this->table->generate($this->format_data->format_table_data($equipment, 'equipment/get_equipment?equipment_id=', 'equipment_id'));
+  echo $this->table->generate($this->format_data->format_table_data($equipment, $table_operator, $key_field));
 ?>

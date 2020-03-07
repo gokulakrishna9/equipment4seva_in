@@ -74,10 +74,13 @@ class HTML_builders {
     $grid = '';//$html_elements['hidden'];
     // Dynamic layout pending
     $grid_class = array('w3-quarter', 'w3-third', 'w3-half');
+    if(!$html_elements)
+      return;
     forEach($html_elements as $key => $element){
-      $total_elements++;
-      if($key == 'hidden')
+      $total_elements++;      
+      if($key === 'hidden'){
         continue;
+      }
       if($cols_added == $number_of_columns+1){
         $cols_added = 1;
       }
@@ -94,6 +97,7 @@ class HTML_builders {
     }
     forEach($html_elements['hidden'] as $hd_element)
       $grid .= $hd_element;
+    
     return $grid;
   }
 }

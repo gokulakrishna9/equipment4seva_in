@@ -45,6 +45,10 @@ class Equipment_model extends CI_Model {
     return $rslts;
   }
 
+  function count_all(){
+    return $this->db->count_all('equipment');
+  }
+
   function get_equipment_record(){
     if($this->input->get('equipment_id'))
       $this->db->where('equipment.equipment_id', $this->input->get('equipment_id'));
