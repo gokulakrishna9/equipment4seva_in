@@ -35,7 +35,7 @@ class Equipment extends CI_Controller {
   private function load_defaults(){    
     //<<-- View Data -->>
     $this->data['total_rows'] = $this->equipment_model->count_all(); 
-    $this->data['equipment'] = $this->equipment_model->get_equipment();
+    $this->data['tabel_data'] = $this->equipment_model->get_equipment();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_model->get_equipment_form_fields();
     $this->data['key_field'] = 'equipment_id';
@@ -51,8 +51,7 @@ class Equipment extends CI_Controller {
     $this->data['select_data']['procured_by_id'] = $this->data['select_data']['vendor_id'];
     $this->data['select_data']['supplier_id'] = $this->data['select_data']['vendor_id'];
     // <<-- Global, page info -->>
-    $this->data['header'] = 'equipment';
-    $this->data['leftNav'] = 'equipment';
+    $this->data['header'] = 'equipment/equipment';
   }
 
   function index(){

@@ -34,7 +34,7 @@ class Equipment_service_record extends CI_Controller {
   private function load_defaults(){    
     //<<-- View Data -->>
     $this->data['total_rows'] = $this->equipment_accessory_model->count_all(); 
-    $this->data['equipment'] = $this->equipment_accessory_model->get_equipment_accessory();
+    $this->data['tabel_data'] = $this->equipment_accessory_model->get_equipment_accessory();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_accessory_model->get_form_fields();
     $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();

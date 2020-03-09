@@ -23,7 +23,7 @@
     <div class="w3-bar w3-margin w3-padding"></div>
     <!-- Left Nav -->
     <div class="w3-sidebar w3-bar-block w3-light-grey" style="width:15%">
-        <?php $this->load->view('common/left_nav', array($header, $leftNav)); ?>
+        <?php $this->load->view('common/left_nav', array($header)); ?>
     </div>
     <div style="margin-left:15%" class="">
         &nbsp;

@@ -39,5 +39,5 @@
 
   // Build Table
   $this->table->set_template($template);
-  echo $this->table->generate($this->format_data->format_table_data($equipment, $table_operator, $key_field));
+  echo $this->table->generate($this->format_data->format_table_data($tabel_data, $table_operator, $key_field));
 ?>
