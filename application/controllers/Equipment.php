@@ -8,8 +8,8 @@ class Equipment extends CI_Controller {
     $this->data['header'] = 'equipment';
     $this->data['form_action'] = 'equipment/add_update_equipment';
     $this->load->model('equipment_model');
-    $this->load->model('equipment_type');
-    $this->load->model('equipment_status_type');
+    $this->load->model('equipment_type_model');
+    $this->load->model('equipment_functional_status_model');
     $this->load->model('donor');
     $this->load->model('vendor');
     if(method_exists($this, $method)){
@@ -43,8 +43,8 @@ class Equipment extends CI_Controller {
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Masters -->>
-    $this->data['select_data']['equipment_type_id'] = $this->equipment_type->get_equipment_type();
-    $this->data['select_data']['equipment_status_type_id'] = $this->equipment_status_type->get_equipment_status_type();
+    $this->data['select_data']['equipment_type_id'] = $this->equipment_type_model->get_equipment_type();
+    $this->data['select_data']['equipment_status_type_id'] = $this->equipment_functional_status_model->get_functional_status();
     $this->data['select_data']['donor_id'] = $this->donor->get_donors();
     $this->data['select_data']['vendor_id'] = $this->vendor->get_vendor();
     $this->data['select_data']['manufacturer_id'] = $this->data['select_data']['vendor_id'];

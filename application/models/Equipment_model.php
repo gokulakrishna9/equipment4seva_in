@@ -31,7 +31,7 @@ class Equipment_model extends CI_Model {
   }
 
   function get_equipment(){
-    $this->db->select("equipment_id, equipment_type, manufac.vendor_name, eq_name, model, serial_number, mac_address, asset_number, donor_name, proc.vendor_name, purchase_order_date, cost, supp.vendor_name, invoice_number, invoice_date, supply_date, installation_date, warranty_start_date, warranty_end_date, equipment_status_type")
+    $this->db->select("equipment_id, equipment_type, manufac.vendor_name, eq_name, model, serial_number, mac_address, asset_number, donor_name, proc.vendor_name, purchase_order_date, cost, supp.vendor_name, invoice_number, invoice_date, supply_date, installation_date, warranty_start_date, warranty_end_date, working_status")
       ->from('equipment')
       ->join('equipment_type', 'equipment_type.equipment_type_id = equipment.equipment_type_id', 'left')
       ->join('equipment_procurement_type', 'equipment_procurement_type.equipment_procurement_type_id  = equipment.equipment_procurement_type_id', 'left')
@@ -39,7 +39,7 @@ class Equipment_model extends CI_Model {
       ->join('vendor as supp', 'supp.vendor_id = equipment.supplier_id', 'left')
       ->join('vendor as proc', 'proc.vendor_id = equipment.procured_by_id', 'left')
       ->join('donors', 'donors.donor_id = equipment.donor_id', 'left')
-      ->join('equipment_status_type', 'equipment_status_type.equipment_status_type_id = equipment.functional_status_id', 'left');
+      ->join('equipment_functional_status', 'equipment_functional_status.functional_status_id = equipment.functional_status_id', 'left');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
