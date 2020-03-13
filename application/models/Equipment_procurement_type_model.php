@@ -1,40 +1,40 @@
 <?php
-class Caller_institution_model extends CI_Model {
+class Equipment_procurement_type_model extends CI_Model {
   // label, html_element, {type | master_value_field, master label field}, ... 
-  private $equipment_accessory_form_fields = array(
-    'caller_institution_id'	=> array('', 'input', 'hidden'),
-    'caller_institution'	=> array('Caller Institution', 'input', 'text')
+  private $equipment_procurement_type_form_fields = array(
+    'equipment_procurement_type_id'	=> array('', 'input', 'hidden'),
+    'procurement_type'	=> array('Procurement Type', 'input', 'text')
   );
 
   function get_form_fields(){
-    return $this->equipment_accessory_form_fields;
+    return $this->equipment_procurement_type_form_fields;
   }
 
-  function get_caller_institution(){
+  function get_equipment_procurement_type(){
     $this->db->select("*")
-      ->from('caller_institution');
+      ->from('equipment_procurement_type');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
   }
 
   function count_all(){
-    return $this->db->count_all('equipment_accessory');
+    return $this->db->count_all('equipment_procurement_type');
   }
 
-  function get_caller_institution_record(){
-    if($this->input->get('caller_institution_id'))
-      $this->db->where('caller_institution.caller_institution_id', $this->input->get('caller_institution_id'));
+  function get_equipment_procurement_type_record(){
+    if($this->input->get('equipment_procurement_type_id'))
+      $this->db->where('equipment_procurement_type.equipment_procurement_type_id', $this->input->get('equipment_procurement_type_id'));
     $this->db->select("*")
-    ->from('caller_institution');
+    ->from('equipment_procurement_type');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];
   }
 
-  function add_update_caller_institution(){
+  function add_update_equipment_procurement_type(){
     $post_data = array();
-    foreach($this->equipment_accessory_form_fields as $field => $props){
+    foreach($this->equipment_procurement_type_form_fields as $field => $props){
       $post_data[$field] = is_null($this->input->post($field)) ? ' ' : $this->input->post($field);
     }
     /*
@@ -43,7 +43,7 @@ class Caller_institution_model extends CI_Model {
       created_datetime,
       updated_datetime 
     */
-    $this->db->replace('caller_institution', $post_data);
+    $this->db->replace('equipment_procurement_type', $post_data);
     $insert_id = $this->db->insert_id();
     return $insert_id;
   }

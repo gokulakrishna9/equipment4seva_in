@@ -9,7 +9,11 @@
     'masters' => [
       'Equipment Type' => 'equipment_type',
       'Eq Functional Status' => 'equipment_functional_status',
-      'Eq Procurement Status' => 'equipment_procurement_status'
+      'Eq Procurement Status' => 'equipment_procurement_status',
+      'Eq Procurement Type' => 'equipment_procurement_type',
+      'Vendor Type' => 'vendor_type',
+      'Vendor Contact' => 'vendor_contact',
+      'Vendor' => 'vendor'
     ],
     'logs' => [
     ]
