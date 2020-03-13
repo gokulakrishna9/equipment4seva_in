@@ -47,7 +47,12 @@ class Equipment_procurement_status extends CI_Controller {
   }
 
   private function authenticate_user(){
-
+    if($this->session->has_userdata('logged_in')){
+      return true;
+    }      
+    else{
+      return false;
+    }
   }
 
   private function authorize_user(){

@@ -3,8 +3,9 @@
     'Equipment'=> 'equipment', 
     'Logs'=>'url',
     'Masters'=> 'equipment_type',
-    'Settings'=>'url'
+    'Settings'=>'url',
   ); 
+  $logout = 'welcome/logout';
 ?>
 <?php 
   $route = explode('/', $header);
@@ -16,5 +17,9 @@
 ?>
   <a href="<?php echo base_url().$hdr; ?>" class="w3-bar-item w3-button <?php echo $highlight; ?>">
     <?php echo $label; ?>
-  </a>    
+  </a>   
+  <a href=""></a> 
 <?php } ?>
+<a href="<?php echo base_url().$logout; ?>" class="w3-bar-item w3-right w3-button <?php echo $highlight; ?>">
+  <?php echo 'Logout'; ?>
+</a>   

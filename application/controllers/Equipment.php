@@ -3,6 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Equipment extends CI_Controller {
   public function _remap($method){
+    if(!$this->authenticate_user()){
+      $this->default_handler();
+      return;
+    }
     // Authentication, Authorization
     $this->data = array();
     $this->data['header'] = 'equipment';
@@ -25,7 +29,12 @@ class Equipment extends CI_Controller {
   }
 
   private function authenticate_user(){
-
+    if($this->session->has_userdata('logged_in')){
+      return true;
+    }      
+    else{
+      return false;
+    }
   }
 
   private function authorize_user(){
