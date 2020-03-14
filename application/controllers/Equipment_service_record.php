@@ -5,13 +5,13 @@ class Equipment_service_record extends CI_Controller {
   public function _remap($method){
     // Authentication, Authorization
     $this->data = array();
-    $this->data['header'] = 'equipment/equipment_accessory';
-    $this->data['form_action'] = 'equipment_accessory/add_update_equipment_accessory';
+    $this->data['header'] = 'equipment/equipment_service_record';
+    $this->data['form_action'] = 'equipment_service_record/add_update_equipment_service_record';
     $this->load->model('equipment_model');
     $this->load->model('equipment_service_record_model');
     $this->load->model('user_detail');
-    $this->load->model('caller_institution');
-    $this->load->model('vendor');
+    $this->load->model('caller_institution_model');
+    $this->load->model('vendor_model');
     if(method_exists($this, $method)){
       $this->$method();
       $this->load_defaults();
@@ -33,13 +33,13 @@ class Equipment_service_record extends CI_Controller {
 
   private function load_defaults(){    
     //<<-- View Data -->>
-    $this->data['total_rows'] = $this->equipment_accessory_model->count_all(); 
-    $this->data['tabel_data'] = $this->equipment_accessory_model->get_equipment_accessory();
+    $this->data['total_rows'] = $this->equipment_service_record_model->count_all(); 
+    $this->data['tabel_data'] = $this->equipment_service_record_model->get_equipment_service_record();
     // <<-- Scaffold Data point  -->>
-    $this->data['form_fields'] = $this->equipment_accessory_model->get_form_fields();
+    $this->data['form_fields'] = $this->equipment_service_record_model->get_form_fields();
     $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
-    $this->data['key_field'] = 'equipment_accessory_id';
-    $this->data['table_operator'] ='equipment_accessory/get_equipment_accessory?equipment_accessory_id=';
+    $this->data['key_field'] = 'request_id';
+    $this->data['table_operator'] ='equipment_service_record/get_equipment_service_record?request_id=';
   }
 
   function index(){
@@ -47,12 +47,12 @@ class Equipment_service_record extends CI_Controller {
     // Return data with route
   }
 
-  function add_update_equipment_accessory(){
-    $this->equipment_accessory_model->add_update_equipment_accessory();
+  function add_update_equipment_service_record(){
+    $this->equipment_service_record_model->add_update_equipment_service_record();
   }
 
-  function get_equipment_accessory(){
-    $this->data['update_data'] = $this->equipment_accessory_model->get_equipment_accessory_record();
+  function get_equipment_service_record(){
+    $this->data['update_data'] = $this->equipment_service_record_model->get_equipment_service_record_record();
   }
 
   function delete_equipment(){

@@ -16,7 +16,7 @@ class Equipment extends CI_Controller {
     $this->load->model('equipment_functional_status_model');
     $this->load->model('equipment_procurement_status_model');
     $this->load->model('equipment_procurement_type_model');
-    $this->load->model('vendor');
+    $this->load->model('vendor_model');
     if(method_exists($this, $method)){
       $this->$method();
       $this->load_defaults();
@@ -57,7 +57,7 @@ class Equipment extends CI_Controller {
     $this->data['select_data']['functional_status_id'] = $this->equipment_functional_status_model->get_functional_status();
     $this->data['select_data']['procurement_status_id'] = $this->equipment_procurement_status_model->get_equipment_procurement_status();
     $this->data['select_data']['equipment_procurement_type_id'] = $this->equipment_procurement_type_model->get_equipment_procurement_type();
-    $this->data['select_data']['vendor_id'] = $this->vendor->get_vendor();
+    $this->data['select_data']['vendor_id'] = $this->vendor_model->get_vendor();
     $this->data['select_data']['donor_id'] = $this->data['select_data']['vendor_id'];
     $this->data['select_data']['manufacturer_id'] = $this->data['select_data']['vendor_id'];
     $this->data['select_data']['procured_by_id'] = $this->data['select_data']['vendor_id'];

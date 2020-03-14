@@ -12,7 +12,7 @@ class Vendor_model extends CI_Model {
     'account_no'	=> array('Account Number', 'input', 'text'),
     'bank_name' => array('Bank', 'input', 'text'),
     'branch' => array('Branch', 'input', 'text'),
-    'vendor_email' => array('Email', 'input', 'email'),
+    'vendor_email' => array('Email', 'input', 'text'),
     'vendor_phone' => array('Phone', 'input', 'text'),
     'contact_person_id' => array('Contact Person', 'select', 'contact_person_id', 'contact_person_name'),
     'vendor_pan' => array('PAN', 'input', 'text')

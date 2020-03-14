@@ -3,8 +3,8 @@
     'equipment' => [
       'Equipment' => 'equipment',
       'Equipment Accessory' => 'equipment_accessory',
-      'Service Record' => 'service_record',
-      'Maintenance Contract' => 'maintenance',
+      'Service Record' => 'equipment_service_record',
+      'Maintenance Contract' => 'equipment_maintenance_contract',
     ],
     'masters' => [
       'Equipment Type' => 'equipment_type',
@@ -16,6 +16,8 @@
       'Vendor' => 'vendor'
     ],
     'logs' => [
+      'Eq Location' => 'equipment_location_log',
+      'Eq Service Record' => 'equipment_service_record_log'
     ]
   );
 ?>
