@@ -27,7 +27,7 @@ class Caller_institution extends CI_Controller {
     $this->data['select_data'] = array();
     $this->data['form_fields'] = $this->caller_institution_model->get_form_fields();
     $this->data['key_field'] = 'caller_institution_id';
-    $this->data['table_operator'] ='caller_institution/get_caller_institution?caller_institution_id=';
+    $this->data['table_operator']['Update'] ='caller_institution/get_caller_institution?caller_institution_id=';
   }
 
   function index(){

@@ -10,7 +10,7 @@
     'thead_close'           => '</thead>',
 
     'heading_row_start'     => '<tr>',
-    'heading_row_end'       => '<td></td><td></td></tr>',
+    'heading_row_end'       => '</tr>',
     'heading_cell_start'    => '<th>',
     'heading_cell_end'      => '</th>',
 

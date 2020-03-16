@@ -13,7 +13,8 @@
       'Eq Procurement Type' => 'equipment_procurement_type',
       'Vendor Type' => 'vendor_type',
       'Vendor Contact' => 'vendor_contact',
-      'Vendor' => 'vendor'
+      'Vendor' => 'vendor',
+      'Place' => 'place'
     ],
     'logs' => [
       'Eq Location' => 'equipment_location_log',

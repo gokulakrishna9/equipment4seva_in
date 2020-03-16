@@ -39,7 +39,7 @@ class Equipment_service_record extends CI_Controller {
     $this->data['form_fields'] = $this->equipment_service_record_model->get_form_fields();
     $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
     $this->data['key_field'] = 'request_id';
-    $this->data['table_operator'] ='equipment_service_record/get_equipment_service_record?request_id=';
+    $this->data['table_operator']['Update'] ='equipment_service_record/get_equipment_service_record?request_id=';
   }
 
   function index(){

@@ -3,9 +3,9 @@ class equipment_location_log_model extends CI_Model {
   // label, html_element, {type | master_value_field, master label field}, ... 
   private $equipment_accessory_form_fields = array(
     'equipment_location_log_id'	=> array('', 'input', 'hidden'),
-    'equipement_id' => array('Party', 'select', 'vendor_id', 'vendor_name'),
+    'equipment_id' => array('Equipment', 'select', 'equipment_id', 'eq_name'),
     'vendor_id' => array('Party', 'select', 'vendor_id', 'vendor_name'),
-    'place_id' => array('Place', 'select', 'place_id', 'place_name'),
+    'place_id' => array('Place', 'select', 'place_id', 'place'),
     'address'	=> array('Address', 'input', 'text'),
     'delivery_date'	=> array('Delivery Date', 'input', 'date'),
   );

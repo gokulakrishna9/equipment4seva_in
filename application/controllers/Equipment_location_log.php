@@ -9,6 +9,8 @@ class Equipment_location_log extends CI_Controller {
     $this->data['form_action'] = 'equipment_location_log/add_update_equipment_location_log';
     $this->load->model('equipment_location_log_model');
     $this->load->model('vendor_model');
+    $this->load->model('equipment_model');
+    $this->load->model('place_model');
     if(method_exists($this, $method)){
       $this->$method();
       $this->load_defaults();
@@ -26,16 +28,19 @@ class Equipment_location_log extends CI_Controller {
     $this->data['tabel_data'] = $this->equipment_location_log_model->get_equipment_location_log();
 
     $this->data['select_data']['vendor_id'] = $this->vendor_model->get_vendor();
-    $this->data['select_data']['place_id'] = array();
+    $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
+    $this->data['select_data']['place_id'] = $this->place_model->get_place();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_location_log_model->get_form_fields();
     $this->data['key_field'] = 'equipment_location_log_id';
-    $this->data['table_operator'] ='equipment_location_log/get_equipment_location_log?equipment_location_log_id=';
+    $this->data['table_operator']['Update'] ='equipment_location_log/get_equipment_location_log?equipment_location_log_id=';
   }
 
   function index(){
     // Modal with View, Update, Delete buttons
     // Return data with route
+    if(!is_null($this->input->get('equipment_id')))
+      $this->data['update_data'] = (object)['equipment_id'=>$this->input->get('equipment_id')];
   }
 
   function add_update_equipment_location_log(){

@@ -49,7 +49,8 @@ class Equipment extends CI_Controller {
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_model->get_equipment_form_fields();
     $this->data['key_field'] = 'equipment_id';
-    $this->data['table_operator'] ='equipment/get_equipment?equipment_id=';
+    $this->data['table_operator']['Update'] ='equipment/get_equipment?equipment_id=';
+    $this->data['table_operator']['Log Location'] ='equipment_location_log/index?equipment_id=';
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Masters -->>

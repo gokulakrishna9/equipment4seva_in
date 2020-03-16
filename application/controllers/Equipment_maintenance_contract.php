@@ -43,7 +43,7 @@ class Equipment_maintenance_contract extends CI_Controller {
     $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
     $this->data['select_data']['vendor_id'] = $this->vendor_model->get_vendor();
     $this->data['key_field'] = 'amc_cmc_id';
-    $this->data['table_operator'] ='equipment_maintenance_contract/get_equipment_maintenance_contract?amc_cmc_id=';
+    $this->data['table_operator']['Update'] ='equipment_maintenance_contract/get_equipment_maintenance_contract?amc_cmc_id=';
   }
 
   function index(){
