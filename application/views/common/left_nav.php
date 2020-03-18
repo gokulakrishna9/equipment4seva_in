@@ -16,10 +16,12 @@
       'Vendor' => 'vendor',
       'Place' => 'place'
     ],
+    /*
     'logs' => [
       'Eq Location' => 'equipment_location_log',
       'Eq Service Record' => 'equipment_service_record_log'
     ]
+    */
   );
 ?>
 <?php

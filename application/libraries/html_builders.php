@@ -100,4 +100,13 @@ class HTML_builders {
     
     return $grid;
   }
+
+  function build_record($parent_record){
+    $content = '<div class="w3-row w3-panel w3-pale-yellow w3-border">';
+    foreach($parent_record as $field_name => $value){
+      $content .= '<div class="w3-col s3"><span class="w3-small"><b>'.ucwords(str_replace('_', ' ', $field_name)).': </b>'.$value.'</span>&nbsp;</div>';
+    }
+    $content .= '</div>';
+    return $content;
+  }
 }

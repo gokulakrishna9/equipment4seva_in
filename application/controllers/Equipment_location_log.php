@@ -5,7 +5,8 @@ class Equipment_location_log extends CI_Controller {
   public function _remap($method){
     // Authentication, Authorization
     $this->data = array();
-    $this->data['header'] = 'logs/equipment_location_log';
+    $this->data['header'] = 'equipment/equipment';
+    $this->data['parent_route'] = 'equipment';
     $this->data['form_action'] = 'equipment_location_log/add_update_equipment_location_log';
     $this->load->model('equipment_location_log_model');
     $this->load->model('vendor_model');
@@ -18,7 +19,7 @@ class Equipment_location_log extends CI_Controller {
       $this->default_handler();
       return;
     }
-    $this->data['leftNav'] = 'equipment_location_log';
+    $this->data['leftNav'] = 'equipment';
     $this->load->view('container/default_container', $this->data);
   }
 
@@ -26,9 +27,9 @@ class Equipment_location_log extends CI_Controller {
     // <<-- View Data -->>
     $this->data['total_rows'] = $this->equipment_location_log_model->count_all(); 
     $this->data['tabel_data'] = $this->equipment_location_log_model->get_equipment_location_log();
-
+    if($this->input->post_get('equipment_id'))
+      $this->data['parent_record'] = $this->equipment_model->get_equipment()[0];
     $this->data['select_data']['vendor_id'] = $this->vendor_model->get_vendor();
-    $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
     $this->data['select_data']['place_id'] = $this->place_model->get_place();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_location_log_model->get_form_fields();

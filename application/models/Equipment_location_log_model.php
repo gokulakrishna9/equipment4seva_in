@@ -3,7 +3,7 @@ class equipment_location_log_model extends CI_Model {
   // label, html_element, {type | master_value_field, master label field}, ... 
   private $equipment_accessory_form_fields = array(
     'equipment_location_log_id'	=> array('', 'input', 'hidden'),
-    'equipment_id' => array('Equipment', 'select', 'equipment_id', 'eq_name'),
+    'equipment_id' => array('', 'input', 'hidden'),
     'vendor_id' => array('Party', 'select', 'vendor_id', 'vendor_name'),
     'place_id' => array('Place', 'select', 'place_id', 'place'),
     'address'	=> array('Address', 'input', 'text'),
@@ -15,6 +15,8 @@ class equipment_location_log_model extends CI_Model {
   }
 
   function get_equipment_location_log(){
+    if($this->input->post_get('equipment_id'))
+      $this->db->where('equipment_location_log.equipment_id', $this->input->post_get('equipment_id'));
     $this->db->select("*")
       ->from('equipment_location_log');
     $qry = $this->db->get();
@@ -27,8 +29,8 @@ class equipment_location_log_model extends CI_Model {
   }
 
   function get_equipment_location_log_record(){
-    if($this->input->get('equipment_location_log_id'))
-      $this->db->where('equipment_location_log.equipment_location_log_id', $this->input->get('equipment_location_log_id'));
+    if($this->input->post_get('equipment_location_log_id'))
+      $this->db->where('equipment_location_log.equipment_location_log_id', $this->input->post_get('equipment_location_log_id'));
     $this->db->select("*")
     ->from('equipment_location_log');
     $qry = $this->db->get();

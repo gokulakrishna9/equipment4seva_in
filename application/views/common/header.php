@@ -1,7 +1,7 @@
 <?php 
   $header_list = array(
     'Equipment'=> 'equipment', 
-    'Logs'=>'equipment_location_log',
+    //'Logs'=>'equipment_location_log',
     'Masters'=> 'equipment_type',
     'Settings'=>'url',
   ); 

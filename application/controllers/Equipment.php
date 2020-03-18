@@ -17,6 +17,7 @@ class Equipment extends CI_Controller {
     $this->load->model('equipment_procurement_status_model');
     $this->load->model('equipment_procurement_type_model');
     $this->load->model('vendor_model');
+    $this->load->model('journal_type_model');
     if(method_exists($this, $method)){
       $this->$method();
       $this->load_defaults();
@@ -63,6 +64,7 @@ class Equipment extends CI_Controller {
     $this->data['select_data']['manufacturer_id'] = $this->data['select_data']['vendor_id'];
     $this->data['select_data']['procured_by_id'] = $this->data['select_data']['vendor_id'];
     $this->data['select_data']['supplier_id'] = $this->data['select_data']['vendor_id'];
+    $this->data['select_data']['journal_type_id'] = $this->journal_type_model->get_journal_type();
     // <<-- Global, page info -->>
     $this->data['header'] = 'equipment/equipment';
   }

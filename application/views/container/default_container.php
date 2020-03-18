@@ -28,6 +28,18 @@
     <div style="margin-left:15%" class="">
         &nbsp;
     </div>
+    <?php 
+        if(isset($parent_record)){
+    ?>
+    <div style="margin-left:15%;overflow:auto;" class="w3-container">    
+    <a href='<?php echo base_url().$parent_route; ?>' class='w3-btn w3-orange'>Back</a>
+    <?php
+        echo $this->html_builders->build_record($parent_record);
+    ?>
+    </div>
+    <?php
+        }
+    ?>
     <!-- Form -->
     <div style="margin-left:15%" class="w3-container">
         <?php
@@ -58,7 +70,7 @@
     </div>
     <!-- Table -->
     <div style="margin-left:15%;overflow:auto;" class="w3-container">
-        <?php $this->load->view('common/table', $header); ?>
+        <?php $this->load->view('common/table'); ?>
     </div>
 </body>
 </html>
