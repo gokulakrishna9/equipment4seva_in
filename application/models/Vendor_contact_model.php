@@ -14,7 +14,8 @@ class vendor_contact_model extends CI_Model {
 
   function get_vendor_contact(){
     $this->db->select("*")
-      ->from('vendor_contact');
+      ->from('vendor_contact')
+      ->order_by('contact_person_name', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -28,7 +29,8 @@ class vendor_contact_model extends CI_Model {
     if($this->input->get('contact_person_id'))
       $this->db->where('vendor_contact.contact_person_id', $this->input->get('contact_person_id'));
     $this->db->select("*")
-    ->from('vendor_contact');
+      ->from('vendor_contact')
+      ->order_by('contact_person_name', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

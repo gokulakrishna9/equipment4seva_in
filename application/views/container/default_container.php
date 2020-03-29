@@ -43,6 +43,7 @@
     <!-- Form -->
     <div style="margin-left:15%" class="w3-container">
         <?php
+        $form_fields = isset($form_fields) ? $form_fields : '';
         $update_data = isset($update_data) ? $update_data : '';
         $form_attributes = array('action'=> 'post', 'class' => 'w3-container', 'id' => 'equipment_form');
         $frm_opn = form_open($form_action, $form_attributes);
@@ -53,8 +54,10 @@
             'type' => 'submit',
             'class' => 'w3-right w3-teal w3-button'
         );
-        echo $frm_opn;
-        echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data, (array)$update_data));
+        if(is_array($form_fields)){
+            echo $frm_opn;
+            echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data, (array)$update_data));
+        }        
         ?>
         <div class="w3-row">
             <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
@@ -70,7 +73,21 @@
     </div>
     <!-- Table -->
     <div style="margin-left:15%;overflow:auto;" class="w3-container">
+        <?php $this->load->view('common/pagination'); ?>
         <?php $this->load->view('common/table'); ?>
     </div>
+    <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
+    <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>
+    <script>
+    /*
+    <?php /*foreach($form_fields as $field => $properties){ 
+        if($properties[2] == 'date'){    
+    ?>
+        $('#<?php echo $field; ?>').Zebra_DatePicker({
+            format: 'M d, Y'
+        });
+    <?php }}*/ ?>
+    */
+    </script>
 </body>
 </html>

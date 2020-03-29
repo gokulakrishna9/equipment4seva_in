@@ -12,7 +12,8 @@ class Service_issue_type_model extends CI_Model {
 
   function get_service_issue_type(){
     $this->db->select("equipment_service_issue_type_id, equipment_service_issue_type")
-      ->from('equipment_service_issue_type');
+      ->from('equipment_service_issue_type')
+      ->order_by('equipment_service_issue_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Service_issue_type_model extends CI_Model {
     if($this->input->get('equipment_service_issue_type_id'))
       $this->db->where('equipment_service_issue_type.equipment_service_issue_type_id', $this->input->get('equipment_service_issue_type_id'));
     $this->db->select("*")
-    ->from('equipment_service_issue_type');
+      ->from('equipment_service_issue_type')
+      ->order_by('equipment_service_issue_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

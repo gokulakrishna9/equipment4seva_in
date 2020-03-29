@@ -26,14 +26,15 @@ class Equipment_service_record_model extends CI_Model {
   }
 
   function get_equipment_service_record(){
-    $this->db->select("request_id, eq_name, CONCAT(user_detail.first_name, ' ', user_detail.last_name) as name, call_date, call_time, call_type, equipment_service_issue_type, call_information, caller_institution, contact_person, vendor_name as service_provider, service_person, service_person_phone, contact_person_phone, service_person_remarks, issue_closure, working_status")
+    $this->db->select("request_id, eq_name, CONCAT(user_detail.first_name, ' ', user_detail.last_name) as name, DATE_FORMAT(call_date, '%d %b %Y') as call_date, call_time, call_type, equipment_service_issue_type, call_information, caller_institution, contact_person, vendor_name as service_provider, service_person, service_person_phone, contact_person_phone, service_person_remarks, issue_closure, working_status")
       ->from('equipment_service_record')
       ->join('equipment', 'equipment.equipment_id = equipment_service_record.equipment_id', 'left')
       ->join('equipment_service_issue_type', 'equipment_service_issue_type.equipment_service_issue_type_id = equipment_service_record.service_issue_type_id ', 'left')
       ->join('caller_institution', 'caller_institution.caller_institution_id = equipment_service_record.caller_institution_id', 'left')
       ->join('user_detail', 'user_detail.user_id = equipment_service_record.user_id', 'left')
       ->join('vendor', 'vendor.vendor_id = equipment_service_record.service_provider_id', 'left')
-      ->join('equipment_functional_status', 'equipment_functional_status.functional_status_id = equipment_service_record.functional_status_id', 'left');
+      ->join('equipment_functional_status', 'equipment_functional_status.functional_status_id = equipment_service_record.functional_status_id', 'left')
+      ->order_by('call_date', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -46,7 +47,9 @@ class Equipment_service_record_model extends CI_Model {
   function get_equipment_service_record_record(){
     if($this->input->get('request_id'))
       $this->db->where('equipment_service_record.request_id', $this->input->get('request_id'));
-    $this->db->select('*')->from('equipment_service_record');
+    $this->db->select('*')
+      ->from('equipment_service_record')
+      ->order_by('call_date', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

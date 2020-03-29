@@ -47,7 +47,7 @@ class HTML_builders {
       if($form_data != '' && array_key_exists($field, $form_data))
         $field_value = $form_data[$field];
       if($properties[2] == 'hidden'){
-        $form_elements['hidden'][] = "<input type='$properties[2]' name='$field' value='$field_value'></input>";
+        $form_elements['hidden'][] = "<input type='$properties[2]' id='$field' name='$field' value='$field_value'></input>";
         continue;
       }
       $input_element = '';
@@ -58,7 +58,7 @@ class HTML_builders {
         $inpt = $this->build_select($select_attributes, $options, $properties[2], $properties[3], $form_data);
         $input_element = $label.$inpt;
       } else if($properties[1] == 'input'){
-        $inpt = "<input $input_attributes type='$properties[2]' name='$field' value='$field_value'></input>";
+        $inpt = "<input $input_attributes type='$properties[2]' id='$field' name='$field' value='$field_value'></input>";
         $input_element = $label.$inpt;
       }
       $form_elements[] = $input_element; 
@@ -76,6 +76,7 @@ class HTML_builders {
     $grid_class = array('w3-quarter', 'w3-third', 'w3-half');
     if(!$html_elements)
       return;
+    $grid_size = 12/$number_of_columns;
     forEach($html_elements as $key => $element){
       $total_elements++;      
       if($key === 'hidden'){
@@ -87,7 +88,7 @@ class HTML_builders {
       if($cols_added == 1){
         $grid .= '<div class="w3-row w3-margin-bottom">';
       }
-      $grid .= '<div class="w3-col w3-mobile w3-quarter w3-margin-right">';
+      $grid .= '<div class="w3-col w3-mobile s12 m6 l'.$grid_size.' w3-padding-small">';
       $grid .= $element;
       $grid .= '</div>';
       if($cols_added == $number_of_columns || $total_elements == sizeof($html_elements)){
@@ -95,8 +96,10 @@ class HTML_builders {
       }
       $cols_added++;
     }
-    forEach($html_elements['hidden'] as $hd_element)
-      $grid .= $hd_element;
+    if(array_key_exists('hidden', $html_elements)){
+      forEach($html_elements['hidden'] as $hd_element)
+        $grid .= $hd_element;
+    }   
     
     return $grid;
   }
@@ -104,9 +107,13 @@ class HTML_builders {
   function build_record($parent_record){
     $content = '<div class="w3-row w3-panel w3-pale-yellow w3-border">';
     foreach($parent_record as $field_name => $value){
-      $content .= '<div class="w3-col s3"><span class="w3-small"><b>'.ucwords(str_replace('_', ' ', $field_name)).': </b>'.$value.'</span>&nbsp;</div>';
+      $content .= '<div class="w3-col w3-mobile s12 m6 l4"><span class="w3-medium"><b>'.ucwords(str_replace('_', ' ', $field_name)).': </b>'.$value.'</span>&nbsp;</div>';
     }
     $content .= '</div>';
     return $content;
+  }
+
+  function build_pagination(){
+    
   }
 }

@@ -41,7 +41,11 @@ class Equipment_accessory extends CI_Controller {
     $this->data['form_fields'] = $this->equipment_accessory_model->get_form_fields();
     $this->data['select_data']['equipment_id'] = $this->equipment_model->get_equipment();
     $this->data['key_field'] = 'equipment_accessory_id';
-    $this->data['table_operator']['Update'] ='equipment_accessory/get_equipment_accessory?equipment_accessory_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'equipment_accessory/get_equipment_accessory',
+      'caller_institution_id' => 'equipment_accessory_id'
+    );
   }
 
   function index(){

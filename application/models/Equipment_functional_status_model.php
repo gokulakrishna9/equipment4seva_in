@@ -12,7 +12,8 @@ class Equipment_functional_status_model extends CI_Model {
 
   function get_functional_status(){
     $this->db->select("*")
-      ->from('equipment_functional_status');
+      ->from('equipment_functional_status')
+      ->order_by('working_status', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Equipment_functional_status_model extends CI_Model {
     if($this->input->get('functional_status_id'))
       $this->db->where('equipment_functional_status.functional_status_id', $this->input->get('functional_status_id'));
     $this->db->select("*")
-    ->from('equipment_functional_status');
+    ->from('equipment_functional_status')
+    ->order_by('working_status', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

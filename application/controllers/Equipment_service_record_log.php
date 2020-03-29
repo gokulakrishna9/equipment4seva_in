@@ -28,7 +28,11 @@ class Equipment_service_record_log extends CI_Controller {
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_service_record_log_model->get_form_fields();
     $this->data['key_field'] = 'service_record_log_id';
-    $this->data['table_operator']['Update'] ='equipment_service_record_log/get_equipment_service_record_log?service_record_log_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'equipment_service_record_log/get_equipment_service_record_log',
+      'service_record_log_id' => 'service_record_log_id'
+    );
   }
 
   function index(){

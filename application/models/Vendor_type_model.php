@@ -12,7 +12,8 @@ class Vendor_type_model extends CI_Model {
 
   function get_vendor_type(){
     $this->db->select("*")
-      ->from('vendor_type');
+      ->from('vendor_type')
+      ->order_by('vendor_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Vendor_type_model extends CI_Model {
     if($this->input->get('vendor_type_id'))
       $this->db->where('vendor_type.vendor_type_id', $this->input->get('vendor_type_id'));
     $this->db->select("*")
-    ->from('vendor_type');
+      ->from('vendor_type')
+      ->order_by('vendor_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

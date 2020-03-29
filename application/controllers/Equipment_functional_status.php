@@ -26,7 +26,11 @@ class Equipment_functional_status extends CI_Controller {
     $this->data['select_data'] = array();
     $this->data['form_fields'] = $this->equipment_functional_status_model->get_form_fields();
     $this->data['key_field'] = 'functional_status_id';
-    $this->data['table_operator']['Update'] ='equipment_functional_status/get_functional_status?functional_status_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'equipment_functional_status/get_functional_status',
+      'functional_status_id' => 'functional_status_id'
+    );
   }
 
   function index(){

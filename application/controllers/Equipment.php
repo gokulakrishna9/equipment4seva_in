@@ -11,16 +11,9 @@ class Equipment extends CI_Controller {
     $this->data = array();
     $this->data['header'] = 'equipment';
     $this->data['form_action'] = 'equipment/add_update_equipment';
-    $this->load->model('equipment_model');
-    $this->load->model('equipment_type_model');
-    $this->load->model('equipment_functional_status_model');
-    $this->load->model('equipment_procurement_status_model');
-    $this->load->model('equipment_procurement_type_model');
-    $this->load->model('vendor_model');
-    $this->load->model('journal_type_model');
     if(method_exists($this, $method)){
+      $this->load_model();
       $this->$method();
-      $this->load_defaults();
     } else {
       $this->default_handler();
       return;
@@ -28,6 +21,10 @@ class Equipment extends CI_Controller {
     $this->data['components']['forms/equipment'] = array();  // forms data
     $this->load->view('container/default_container', $this->data);
     // Common UI
+  }
+
+  private function set_session_filters(){
+
   }
 
   private function authenticate_user(){
@@ -43,15 +40,34 @@ class Equipment extends CI_Controller {
 
   }
 
+  private function load_model() {
+    $this->load->model('equipment_model');
+    $this->load->model('equipment_type_model');
+    $this->load->model('equipment_functional_status_model');
+    $this->load->model('equipment_procurement_status_model');
+    $this->load->model('equipment_procurement_type_model');
+    $this->load->model('vendor_model');
+    $this->load->model('journal_type_model');
+  }
+
   private function load_defaults(){    
     //<<-- View Data -->>
+    $this->session->unset_userdata('equipment_id');
     $this->data['total_rows'] = $this->equipment_model->count_all(); 
     $this->data['tabel_data'] = $this->equipment_model->get_equipment();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_model->get_equipment_form_fields();
     $this->data['key_field'] = 'equipment_id';
-    $this->data['table_operator']['Update'] ='equipment/get_equipment?equipment_id=';
-    $this->data['table_operator']['Log Location'] ='equipment_location_log/index?equipment_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'equipment/get_equipment',
+      'equipment_id' => 'equipment_id'
+    );
+    $this->data['table_operator'][] = array(
+      'label' => 'Log Location',
+      'controller_method' => 'equipment_location_log/index',
+      'equipment_id' => 'equipment_id'
+    );
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Masters -->>
@@ -72,14 +88,17 @@ class Equipment extends CI_Controller {
   function index(){
     // Modal with View, Update, Delete buttons
     // Return data with route
+    $this->load_defaults();
   }
 
   function add_update_equipment(){
     $this->equipment_model->add_update_equipment();
+    $this->load_defaults();
   }
 
   function get_equipment(){
     $this->data['update_data'] = $this->equipment_model->get_equipment_record();
+    $this->load_defaults();
   }
 
   function delete_equipment(){

@@ -15,10 +15,14 @@ class equipment_location_log_model extends CI_Model {
   }
 
   function get_equipment_location_log(){
-    if($this->input->post_get('equipment_id'))
-      $this->db->where('equipment_location_log.equipment_id', $this->input->post_get('equipment_id'));
-    $this->db->select("*")
-      ->from('equipment_location_log');
+    if($this->session->has_userdata('equipment_id'))
+      $this->db->where('equipment_location_log.equipment_id', $this->session->equipment_id);
+    $this->db->select("equipment_location_log_id, eq_name as equipment, vendor_name, place, address, delivery_date")
+      ->from('equipment_location_log')
+      ->join('equipment', 'equipment.equipment_id = equipment_location_log.equipment_id', 'left')
+      ->join('vendor', 'vendor.vendor_id = equipment_location_log.vendor_id', 'left')
+      ->join('place', 'place.place_id = equipment_location_log.place_id', 'left')
+      ->order_by('address', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -30,9 +34,10 @@ class equipment_location_log_model extends CI_Model {
 
   function get_equipment_location_log_record(){
     if($this->input->post_get('equipment_location_log_id'))
-      $this->db->where('equipment_location_log.equipment_location_log_id', $this->input->post_get('equipment_location_log_id'));
+      $this->db->where('equipment_location_log.equipment_location_log_id', $this->input->post_get('equipment_location_log_id'));  
     $this->db->select("*")
-    ->from('equipment_location_log');
+    ->from('equipment_location_log')
+    ->order_by('address', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

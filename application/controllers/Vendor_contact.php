@@ -44,7 +44,11 @@ class Vendor_contact extends CI_Controller {
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->vendor_contact_model->get_form_fields();
     $this->data['key_field'] = 'contact_person_id';
-    $this->data['table_operator']['Update'] ='vendor_contact/get_vendor_contact?contact_person_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'vendor_contact/get_vendor_contact',
+      'contact_person_id' => 'contact_person_id'
+    );
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Global, page info -->>

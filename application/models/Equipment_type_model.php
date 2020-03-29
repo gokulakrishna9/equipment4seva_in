@@ -12,7 +12,8 @@ class Equipment_type_model extends CI_Model {
 
   function get_equipment_type(){
     $this->db->select("*")
-      ->from('equipment_type');
+      ->from('equipment_type')
+      ->order_by('equipment_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Equipment_type_model extends CI_Model {
     if($this->input->get('equipment_type_id'))
       $this->db->where('equipment_type.equipment_type_id', $this->input->get('equipment_type_id'));
     $this->db->select("*")
-    ->from('equipment_type');
+      ->from('equipment_type')
+      ->order_by('equipment_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

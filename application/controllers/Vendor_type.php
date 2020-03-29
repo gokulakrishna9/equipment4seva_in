@@ -44,7 +44,11 @@ class Vendor_type extends CI_Controller {
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->vendor_type_model->get_form_fields();
     $this->data['key_field'] = 'vendor_type_id';
-    $this->data['table_operator']['Update'] ='vendor_type/get_vendor_type?vendor_type_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'vendor_type/get_vendor_type',
+      'vendor_type_id' => 'vendor_type_id'
+    );
     // <<-- select_data -->>
     $this->data['select_data'] = array();
     // <<-- Global, page info -->>

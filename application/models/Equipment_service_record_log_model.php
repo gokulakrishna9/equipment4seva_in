@@ -13,7 +13,8 @@ class Equipment_service_record_log_model extends CI_Model {
 
   function get_equipment_service_record_log(){
     $this->db->select("*")
-      ->from('equipment_service_record_log');
+      ->from('equipment_service_record_log')
+      ->order_by('status_note', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -27,7 +28,8 @@ class Equipment_service_record_log_model extends CI_Model {
     if($this->input->get('service_record_log_id'))
       $this->db->where('equipment_service_record_log.service_record_log_id', $this->input->get('service_record_log_id'));
     $this->db->select("*")
-    ->from('equipment_service_record_log');
+      ->from('equipment_service_record_log')
+      ->order_by('status_note', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

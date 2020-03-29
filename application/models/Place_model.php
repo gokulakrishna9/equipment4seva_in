@@ -12,7 +12,8 @@ class Place_model extends CI_Model {
 
   function get_place(){
     $this->db->select("*")
-      ->from('place');
+      ->from('place')
+      ->order_by('place', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Place_model extends CI_Model {
     if($this->input->get('place_id'))
       $this->db->where('place.place_id', $this->input->get('place_id'));
     $this->db->select("*")
-    ->from('place');
+      ->from('place')
+      ->order_by('place', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

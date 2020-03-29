@@ -14,7 +14,8 @@ class Equipment_accessory_model extends CI_Model {
   function get_equipment_accessory(){
     $this->db->select("equipment_accessory_id, accessory_name, eq_name as equipment_name")
       ->from('equipment_accessory')
-      ->join('equipment', 'equipment.equipment_id = equipment_accessory.equipment_id', 'left');
+      ->join('equipment', 'equipment.equipment_id = equipment_accessory.equipment_id', 'left')
+      ->order_by('accessory_name', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -28,7 +29,8 @@ class Equipment_accessory_model extends CI_Model {
     if($this->input->get('equipment_accessory_id'))
       $this->db->where('equipment_accessory.equipment_accessory_id', $this->input->get('equipment_accessory_id'));
     $this->db->select("*")
-    ->from('equipment_accessory');
+    ->from('equipment_accessory')
+    ->order_by('accessory_name', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

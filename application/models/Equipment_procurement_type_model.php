@@ -13,6 +13,7 @@ class Equipment_procurement_type_model extends CI_Model {
   function get_equipment_procurement_type(){
     $this->db->select("*")
       ->from('equipment_procurement_type');
+      //->order_by('equipment_procurement_type.procurement_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Equipment_procurement_type_model extends CI_Model {
     if($this->input->get('equipment_procurement_type_id'))
       $this->db->where('equipment_procurement_type.equipment_procurement_type_id', $this->input->get('equipment_procurement_type_id'));
     $this->db->select("*")
-    ->from('equipment_procurement_type');
+      ->from('equipment_procurement_type')
+      ->order_by('equipment_procurement_type.procurement_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

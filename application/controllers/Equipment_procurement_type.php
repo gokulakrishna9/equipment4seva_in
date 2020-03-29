@@ -26,7 +26,11 @@ class Equipment_procurement_type extends CI_Controller {
     $this->data['select_data'] = array();
     $this->data['form_fields'] = $this->equipment_procurement_type_model->get_form_fields();
     $this->data['key_field'] = 'equipment_procurement_type_id';
-    $this->data['table_operator']['Update'] ='equipment_procurement_type/get_equipment_procurement_type?equipment_procurement_type_id=';
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'equipment_procurement_type/get_equipment_procurement_type',
+      'equipment_procurement_type_id' => 'equipment_procurement_type_id'
+    );
   }
 
   function index(){

@@ -12,7 +12,8 @@ class Equipment_procurement_status_model extends CI_Model {
 
   function get_equipment_procurement_status(){
     $this->db->select("*")
-      ->from('equipment_procurement_status');
+      ->from('equipment_procurement_status')
+      ->order_by('procurement_status', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Equipment_procurement_status_model extends CI_Model {
     if($this->input->get('equipment_procurement_status_id'))
       $this->db->where('equipment_procurement_status.equipment_procurement_status_id', $this->input->get('equipment_procurement_status_id'));
     $this->db->select("*")
-    ->from('equipment_procurement_status');
+      ->from('equipment_procurement_status')
+      ->order_by('procurement_status', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

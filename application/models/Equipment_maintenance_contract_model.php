@@ -8,8 +8,8 @@ class Equipment_maintenance_contract_model extends CI_Model {
     'vendor_id' => array('Vendor', 'select', 'vendor_id', 'vendor_name'),
     'from_date'	=> array('Call Date', 'input', 'date'),
     'to_date'	=> array('To Date', 'input', 'date'),
-    'Rate'	=> array('Rate', 'input', 'text'),
-    'Cost'	=> array('Cost', 'input', 'text'),// <<-- Pending discussion needed
+    'rate'	=> array('Rate', 'input', 'text'),
+    'cost'	=> array('Cost', 'input', 'text'),// <<-- Pending discussion needed
   );
 
   function get_form_fields(){
@@ -17,10 +17,11 @@ class Equipment_maintenance_contract_model extends CI_Model {
   }
 
   function get_equipment_maintenance_contract(){
-    $this->db->select('amc_cmc_id, type, eq_name, from_date, to_date, rate, equipment_maintenance_contract.cost, vendor_name')
+    $this->db->select("amc_cmc_id, type, eq_name, DATE_FORMAT(from_date, '%d %b %Y') as from_date, DATE_FORMAT(to_date, '%d %b %Y') as to_date, rate, equipment_maintenance_contract.cost, vendor_name")
       ->from('equipment_maintenance_contract')
       ->join('equipment', 'equipment.equipment_id = equipment_maintenance_contract.equipment_id', 'left')
-      ->join('vendor', 'vendor.vendor_id = equipment_maintenance_contract.vendor_id', 'left');
+      ->join('vendor', 'vendor.vendor_id = equipment_maintenance_contract.vendor_id', 'left')
+      ->order_by('rate', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -33,7 +34,8 @@ class Equipment_maintenance_contract_model extends CI_Model {
   function get_equipment_maintenance_contract_record(){
     if($this->input->get('amc_cmc_id'))
       $this->db->where('equipment_maintenance_contract.amc_cmc_id', $this->input->get('amc_cmc_id'));
-    $this->db->select('*')->from('equipment_maintenance_contract');
+    $this->db->select('*')->from('equipment_maintenance_contract')
+         ->order_by('rate', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

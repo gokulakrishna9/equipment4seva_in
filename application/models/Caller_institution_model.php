@@ -12,7 +12,8 @@ class Caller_institution_model extends CI_Model {
 
   function get_caller_institution(){
     $this->db->select("*")
-      ->from('caller_institution');
+      ->from('caller_institution')
+      ->order_by('caller_institution', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -26,7 +27,8 @@ class Caller_institution_model extends CI_Model {
     if($this->input->get('caller_institution_id'))
       $this->db->where('caller_institution.caller_institution_id', $this->input->get('caller_institution_id'));
     $this->db->select("*")
-    ->from('caller_institution');
+    ->from('caller_institution')
+    ->order_by('caller_institution', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

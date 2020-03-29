@@ -27,7 +27,12 @@ class Place extends CI_Controller {
     $this->data['select_data'] = array();
     $this->data['form_fields'] = $this->place_model->get_form_fields();
     $this->data['key_field'] = 'place_id';
-    $this->data['table_operator']['Update'] ='place/get_place?place_id=';
+    
+    $this->data['table_operator'][] = array(
+      'label' => 'Update',
+      'controller_method' => 'place/get_place',
+      'place_id' => 'place_id'
+    );
   }
 
   function index(){
