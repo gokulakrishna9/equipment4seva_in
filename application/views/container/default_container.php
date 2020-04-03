@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS</title>
+<title>Equipment For Seva</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?php echo base_url();?>assets\css_lib\w3.css">
 <script>
@@ -49,8 +49,8 @@
         $frm_opn = form_open($form_action, $form_attributes);
         $frm_cls = form_close();
         $button_data = array(
-            'name' => 'equipment',
-            'id' => 'equipment',
+            'name' => '',
+            'id' => '',
             'type' => 'submit',
             'class' => 'w3-right w3-teal w3-button'
         );
@@ -75,6 +75,7 @@
     <div style="margin-left:15%;overflow:auto;" class="w3-container">
         <?php $this->load->view('common/pagination'); ?>
         <?php $this->load->view('common/table'); ?>
+        <?php $this->load->view('common/pagination'); ?>
     </div>
     <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
     <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>

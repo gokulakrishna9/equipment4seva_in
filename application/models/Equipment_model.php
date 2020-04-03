@@ -34,7 +34,14 @@ class Equipment_model extends CI_Model {
   }
 
   function get_equipment(){
-    $this->db->select("equipment_id, equipment_type, manufac.vendor_name, eq_name, model, serial_number, mac_address, asset_number, donor.vendor_name as donor_name, proc.vendor_name, DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date, FORMAT(cost, 2, 'en_IN'), supp.vendor_name, invoice_number, DATE_FORMAT(invoice_date, '%d %b %Y') as invoice_date, DATE_FORMAT(supply_date, '%d %b %Y') as supply_date, DATE_FORMAT(installation_date, '%d %b %Y') as installation_date, DATE_FORMAT(warranty_start_date, '%d %b %Y') as warranty_start_date, DATE_FORMAT(warranty_end_date, '%d %b %Y') as warranty_end_date, working_status, journal_type, journal_number, DATE_FORMAT(journal_date, '%d %b %Y') as journal_date")
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
+    // https://stackoverflow.com/questions/12102200/get-records-with-max-value-for-each-group-of-grouped-sql-results
+    $eq_loc_log_str = "(SELECT * FROM (SELECT equipment_id, place.place, vendor_name as custodian, equipment_location_log.delivery_date as delivery_date, address FROM equipment_location_log LEFT JOIN vendor ON equipment_location_log.vendor_id = vendor.vendor_id LEFT JOIN place ON equipment_location_log.place_id = place.place_id ORDER BY delivery_date desc) as ordrd GROUP BY delivery_date) as eq_loc_log";
+    $this->db->select("equipment.equipment_id, equipment_type, eq_name, model, manufac.vendor_name as manufacturer, supp.vendor_name as supplier, serial_number, mac_address, asset_number, donor.vendor_name as donor, proc.vendor_name as procured_by, equipment_procurement_type.procurment_type, FORMAT(cost, 2, 'en_IN') as cost_INR, invoice_number,  DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date, DATE_FORMAT(invoice_date, '%d %b %Y') as invoice_date, DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date , DATE_FORMAT(supply_date, '%d %b %Y') as supply_date, DATE_FORMAT(installation_date, '%d %b %Y') as installation_date, DATE_FORMAT(warranty_start_date, '%d %b %Y') as warranty_start_date, DATE_FORMAT(warranty_end_date, '%d %b %Y') as warranty_end_date, working_status, journal_type, journal_number, DATE_FORMAT(journal_date, '%d %b %Y') as journal_date, address, place, custodian as user, DATE_FORMAT(delivery_date, '%d %b %Y') as delivery_date, equipment.equipment_id as equipment_ID")
       ->from('equipment')
       ->join('equipment_type', 'equipment_type.equipment_type_id = equipment.equipment_type_id', 'left')
       ->join('equipment_procurement_type', 'equipment_procurement_type.equipment_procurement_type_id  = equipment.equipment_procurement_type_id', 'left')
@@ -44,8 +51,9 @@ class Equipment_model extends CI_Model {
       ->join('vendor as donor', 'donor.vendor_id = equipment.donor_id', 'left')
       ->join('journal_type', 'journal_type.journal_type_id = equipment.journal_type_id', 'left')
       ->join('equipment_functional_status', 'equipment_functional_status.functional_status_id = equipment.functional_status_id', 'left')
-      ->order_by('eq_name', 'ASC');
-    //  ->limit();
+      ->order_by('eq_name', 'ASC')
+      ->limit($limit, $offset);
+    $this->db->join("$eq_loc_log_str", 'eq_loc_log.equipment_id = equipment.equipment_id', 'left');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -150,8 +158,10 @@ class Equipment_model extends CI_Model {
     $insert_id = $this->db->insert_id();
     return $insert_id;
   }
+
   function validate_input(){
   }
+
   function transaction_check(){
     // Destroy transactions after a certain limit
   }

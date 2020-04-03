@@ -13,9 +13,15 @@ class vendor_contact_model extends CI_Model {
   }
 
   function get_vendor_contact(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("*")
       ->from('vendor_contact')
-      ->order_by('contact_person_name', 'ASC');
+      ->order_by('contact_person_name', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

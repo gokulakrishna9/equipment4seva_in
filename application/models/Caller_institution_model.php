@@ -11,9 +11,15 @@ class Caller_institution_model extends CI_Model {
   }
 
   function get_caller_institution(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 1;
+    else 
+      $offset = $this->session->page_number * $limit;
     $this->db->select("*")
       ->from('caller_institution')
-      ->order_by('caller_institution', 'ASC');
+      ->order_by('caller_institution', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

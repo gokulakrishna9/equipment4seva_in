@@ -11,9 +11,15 @@ class Equipment_functional_status_model extends CI_Model {
   }
 
   function get_functional_status(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("*")
       ->from('equipment_functional_status')
-      ->order_by('working_status', 'ASC');
+      ->order_by('working_status', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

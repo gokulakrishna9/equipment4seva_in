@@ -11,9 +11,15 @@ class Equipment_type_model extends CI_Model {
   }
 
   function get_equipment_type(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("*")
       ->from('equipment_type')
-      ->order_by('equipment_type', 'ASC');
+      ->order_by('equipment_type', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

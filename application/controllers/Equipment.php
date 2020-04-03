@@ -11,8 +11,12 @@ class Equipment extends CI_Controller {
     $this->data = array();
     $this->data['header'] = 'equipment';
     $this->data['form_action'] = 'equipment/add_update_equipment';
+    // Pagination
+    $this->data['pagination_action'] = 'equipment/index';
+
     if(method_exists($this, $method)){
       $this->load_model();
+      $this->set_session_filters();
       $this->$method();
     } else {
       $this->default_handler();
@@ -22,9 +26,28 @@ class Equipment extends CI_Controller {
     $this->load->view('container/default_container', $this->data);
     // Common UI
   }
-
+  
   private function set_session_filters(){
+    
+  }
 
+  private function set_pagination_data(){
+    if($this->input->get('page_number')){
+      $this->session->set_userdata('page_number', $this->input->get('page_number'));
+      $this->data['page_number'] = $this->input->get('page_number');
+    }
+    else{
+      $this->session->set_userdata('page_number', 1);
+      $this->data['page_number'] = 1;
+    }
+    if($this->input->post('per_page')){
+      $this->session->set_userdata('per_page', $this->input->post('per_page'));
+      $this->data['per_page'] = $this->input->post('per_page');
+    }
+    else{
+      $this->session->set_userdata('per_page', 50);
+      $this->data['per_page'] = 50;
+    }
   }
 
   private function authenticate_user(){
@@ -50,10 +73,11 @@ class Equipment extends CI_Controller {
     $this->load->model('journal_type_model');
   }
 
-  private function load_defaults(){    
+  private function load_defaults(){ 
+    $this->set_pagination_data();
     //<<-- View Data -->>
     $this->session->unset_userdata('equipment_id');
-    $this->data['total_rows'] = $this->equipment_model->count_all(); 
+    $this->data['total_rows'] = $this->equipment_model->count_all();          // Pagination
     $this->data['tabel_data'] = $this->equipment_model->get_equipment();
     // <<-- Scaffold Data point  -->>
     $this->data['form_fields'] = $this->equipment_model->get_equipment_form_fields();

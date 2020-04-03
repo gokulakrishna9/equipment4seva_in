@@ -23,11 +23,17 @@ class Vendor_model extends CI_Model {
   }
 
   function get_vendor(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("vendor_id, vendor_type, vendor_name, vendor_address, vendor_city, vendor_state, vendor_country, account_no, bank_name, branch, vendor_email, vendor_phone, vendor_pan, contact_person_name")
       ->from('vendor')
       ->join('vendor_type', 'vendor_type.vendor_type_id = vendor.vendor_type_id', 'left')
       ->join('vendor_contact', 'vendor_contact.contact_person_id  = vendor.contact_person_id', 'left')
-      ->order_by('vendor_name', 'ASC');
+      ->order_by('vendor_name', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

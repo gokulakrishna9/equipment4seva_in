@@ -3,7 +3,7 @@ class Equipment_procurement_type_model extends CI_Model {
   // label, html_element, {type | master_value_field, master label field}, ... 
   private $equipment_procurement_type_form_fields = array(
     'equipment_procurement_type_id'	=> array('', 'input', 'hidden'),
-    'procurement_type'	=> array('Procurement Type', 'input', 'text')
+    'procurment_type'	=> array('Procurement Type', 'input', 'text')
   );
 
   function get_form_fields(){
@@ -13,7 +13,7 @@ class Equipment_procurement_type_model extends CI_Model {
   function get_equipment_procurement_type(){
     $this->db->select("*")
       ->from('equipment_procurement_type');
-      //->order_by('equipment_procurement_type.procurement_type', 'ASC');
+      //->order_by('equipment_procurement_type.procurment_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;
@@ -28,7 +28,7 @@ class Equipment_procurement_type_model extends CI_Model {
       $this->db->where('equipment_procurement_type.equipment_procurement_type_id', $this->input->get('equipment_procurement_type_id'));
     $this->db->select("*")
       ->from('equipment_procurement_type')
-      ->order_by('equipment_procurement_type.procurement_type', 'ASC');
+      ->order_by('equipment_procurement_type.procurment_type', 'ASC');
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

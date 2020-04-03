@@ -8,6 +8,14 @@ class Caller_institution extends CI_Controller {
     $this->data['header'] = 'masters/caller_institution';
     $this->data['form_action'] = 'caller_institution/add_update_caller_institution';
     $this->load->model('caller_institution_model');
+    
+    // Pagination
+    $this->data['pagination_action'] = 'equipment/index';
+    $this->session->set_userdata('per_page', $this->input->post('page_number'));
+    $this->data['page_number'] = $this->input->post('page_number');
+    $this->session->set_userdata('per_page', 50);
+    $this->data['per_page'] = 50;
+
     if(method_exists($this, $method)){
       $this->$method();
       $this->load_defaults();
@@ -34,9 +42,35 @@ class Caller_institution extends CI_Controller {
     );
   }
 
+  // Pagination
+  private function set_session_filters(){
+    $this->set_pagination_data();
+  }
+
+  private function set_pagination_data(){
+    if($this->input->get('page_number')){
+      $this->session->set_userdata('page_number', $this->input->get('page_number'));
+      $this->data['page_number'] = $this->input->get('page_number');
+    }
+    else{
+      $this->session->set_userdata('page_number', 1);
+      $this->data['page_number'] = 1;
+    }
+    if($this->input->post('per_page')){
+      $this->session->set_userdata('per_page', $this->input->post('per_page'));
+      $this->data['per_page'] = $this->input->post('per_page');
+    }
+    else{
+      $this->session->set_userdata('per_page', 50);
+      $this->data['per_page'] = 50;
+    }
+  }
+
   function index(){
     // Modal with View, Update, Delete buttons
     // Return data with route
+    $this->set_session_filters();
+    $this->load_defaults();
   }
 
   function add_update_caller_institution(){

@@ -12,10 +12,16 @@ class Equipment_accessory_model extends CI_Model {
   }
 
   function get_equipment_accessory(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("equipment_accessory_id, accessory_name, eq_name as equipment_name")
       ->from('equipment_accessory')
       ->join('equipment', 'equipment.equipment_id = equipment_accessory.equipment_id', 'left')
-      ->order_by('accessory_name', 'ASC');
+      ->order_by('accessory_name', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

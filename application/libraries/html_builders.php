@@ -113,7 +113,24 @@ class HTML_builders {
     return $content;
   }
 
-  function build_pagination(){
-    
+  function build_pagination($config){
+    // conifg{url, number_of_records, total_number_of_records, current_page}
+    $number_of_pages = round($config['total_rows']/$config['per_page']);
+    $urls = '';
+    $page_number = $config['page_number'];
+    for($i = 0; $i < $number_of_pages; $i++ ){
+      if($page_number == $i+1)
+        $highlight = 'w3-green';
+      else
+        $highlight = '';
+      $url = base_url().$config['pagination_action'];
+      $urls .= '<a href="'.$url.'?page_number=';
+      $urls .= $i+1;
+      $urls .= ' " class="w3-button ';
+      $urls .= $highlight;
+      $urls .= '">';
+      $urls .= $i+1 .'</a>';
+    }
+    return $urls;
   }
 }

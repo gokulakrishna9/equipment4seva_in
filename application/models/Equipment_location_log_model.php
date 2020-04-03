@@ -15,6 +15,11 @@ class equipment_location_log_model extends CI_Model {
   }
 
   function get_equipment_location_log(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     if($this->session->has_userdata('equipment_id'))
       $this->db->where('equipment_location_log.equipment_id', $this->session->equipment_id);
     $this->db->select("equipment_location_log_id, eq_name as equipment, vendor_name, place, address, delivery_date")
@@ -22,7 +27,8 @@ class equipment_location_log_model extends CI_Model {
       ->join('equipment', 'equipment.equipment_id = equipment_location_log.equipment_id', 'left')
       ->join('vendor', 'vendor.vendor_id = equipment_location_log.vendor_id', 'left')
       ->join('place', 'place.place_id = equipment_location_log.place_id', 'left')
-      ->order_by('address', 'ASC');
+      ->order_by('address', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

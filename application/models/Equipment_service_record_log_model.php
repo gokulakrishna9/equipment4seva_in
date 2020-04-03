@@ -25,11 +25,17 @@ class Equipment_service_record_log_model extends CI_Model {
   }
 
   function get_equipment_service_record_log_record(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     if($this->input->get('service_record_log_id'))
       $this->db->where('equipment_service_record_log.service_record_log_id', $this->input->get('service_record_log_id'));
     $this->db->select("*")
       ->from('equipment_service_record_log')
-      ->order_by('status_note', 'ASC');
+      ->order_by('status_note', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts[0];

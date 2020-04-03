@@ -11,7 +11,6 @@ class Equipment_accessory extends CI_Controller {
     $this->load->model('equipment_accessory_model');
     if(method_exists($this, $method)){
       $this->$method();
-      $this->load_defaults();
     } else {
       $this->default_handler();
       return;
@@ -34,6 +33,7 @@ class Equipment_accessory extends CI_Controller {
   }
 
   private function load_defaults(){    
+    $this->set_pagination_data();
     //<<-- View Data -->>
     $this->data['total_rows'] = $this->equipment_accessory_model->count_all(); 
     $this->data['tabel_data'] = $this->equipment_accessory_model->get_equipment_accessory();
@@ -51,14 +51,41 @@ class Equipment_accessory extends CI_Controller {
   function index(){
     // Modal with View, Update, Delete buttons
     // Return data with route
+    $this->load_defaults();
+  }
+
+  private function set_session_filters(){
+    
+  }
+
+  private function set_pagination_data(){
+    $this->data['pagination_action'] = 'equipment_accessory/index';
+    if($this->input->get('page_number')){
+      $this->session->set_userdata('page_number', $this->input->get('page_number'));
+      $this->data['page_number'] = $this->input->get('page_number');
+    }
+    else{
+      $this->session->set_userdata('page_number', 1);
+      $this->data['page_number'] = 1;
+    }
+    if($this->input->post('per_page')){
+      $this->session->set_userdata('per_page', $this->input->post('per_page'));
+      $this->data['per_page'] = $this->input->post('per_page');
+    }
+    else{
+      $this->session->set_userdata('per_page', 50);
+      $this->data['per_page'] = 50;
+    }
   }
 
   function add_update_equipment_accessory(){
     $this->equipment_accessory_model->add_update_equipment_accessory();
+    $this->load_defaults();
   }
 
   function get_equipment_accessory(){
     $this->data['update_data'] = $this->equipment_accessory_model->get_equipment_accessory_record();
+    $this->load_defaults();
   }
 
   function delete_equipment(){

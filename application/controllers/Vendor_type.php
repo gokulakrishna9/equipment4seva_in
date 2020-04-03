@@ -15,7 +15,6 @@ class Vendor_type extends CI_Controller {
   
     if(method_exists($this, $method)){
       $this->$method();
-      $this->load_defaults();
     } else {
       $this->default_handler();
       return;
@@ -38,6 +37,7 @@ class Vendor_type extends CI_Controller {
   }
 
   private function load_defaults(){    
+    $this->set_pagination_data();
     //<<-- View Data -->>
     $this->data['total_rows'] = $this->vendor_type_model->count_all(); 
     $this->data['tabel_data'] = $this->vendor_type_model->get_vendor_type();
@@ -58,14 +58,41 @@ class Vendor_type extends CI_Controller {
   function index(){
     // Modal with View, Update, Delete buttons
     // Return data with route
+    $this->load_defaults();
+  }
+
+  private function set_session_filters(){
+    
+  }
+
+  private function set_pagination_data(){
+    $this->data['pagination_action'] = 'vendor_type/index';
+    if($this->input->get('page_number')){
+      $this->session->set_userdata('page_number', $this->input->get('page_number'));
+      $this->data['page_number'] = $this->input->get('page_number');
+    }
+    else{
+      $this->session->set_userdata('page_number', 1);
+      $this->data['page_number'] = 1;
+    }
+    if($this->input->post('per_page')){
+      $this->session->set_userdata('per_page', $this->input->post('per_page'));
+      $this->data['per_page'] = $this->input->post('per_page');
+    }
+    else{
+      $this->session->set_userdata('per_page', 50);
+      $this->data['per_page'] = 50;
+    }
   }
 
   function add_update_vendor_type(){
     $this->vendor_type_model->add_update_vendor_type();
+    $this->load_defaults();
   }
 
   function get_vendor_type(){
     $this->data['update_data'] = $this->vendor_type_model->get_vendor_type_record();
+    $this->load_defaults();
   }
 
   function delete_vendor(){

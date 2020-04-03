@@ -11,9 +11,15 @@ class Place_model extends CI_Model {
   }
 
   function get_place(){
+    $limit = $this->session->per_page;
+    if($this->session->page_number == 1)
+      $offset = 0;
+    else 
+      $offset = ($this->session->page_number - 1) * $limit;
     $this->db->select("*")
       ->from('place')
-      ->order_by('place', 'ASC');
+      ->order_by('place', 'ASC')
+      ->limit($limit, $offset);
     $qry = $this->db->get();
     $rslts = $qry->result();
     return $rslts;

@@ -6,7 +6,7 @@
   $template = array(
     'table_open'            => '<table class="w3-table w3-striped w3-bordered">',
 
-    'thead_open'            => '<thead>',
+    'thead_open'            => '<thead class="w3-pale-yellow">',
     'thead_close'           => '</thead>',
 
     'heading_row_start'     => '<tr>',
