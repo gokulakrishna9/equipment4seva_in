@@ -17,11 +17,8 @@
 </style>
 <body>
   <div class="w3-row navbar">
-    <div class="w3-col m12 w3-light-green">
-      <h3 class='w3-margin-left'>Equipment For Seva</h3>
-    </div> 
     <div class="w3-bar w3-border w3-light-grey">
-        <?php $this->load->view('public_components/menu_bar', $header); ?>
+      <?php $this->load->view('public_components/menu_bar', $header); ?>
     </div>
   </div>
   <div class="w3-bar w3-margin w3-padding"></div>
@@ -30,13 +27,9 @@
   </div>
   <!-- Form -->
   <div  class="w3-container w3-padding">
-    <div class="w3-row">
-      <div class="w3-col w3-mobile s12 m12">
-        <h3>Search By:</h3>
-      </div>
-    </div>
     <?php
-    $form_fields = isset($form_fields) ? $form_fields : '';
+    $where_fields = isset($where_fields) ? $where_fields : '';
+    $group_fields = isset($group_fields) ? $group_fields : '';
     $update_data = isset($update_data) ? $update_data : '';
     $form_attributes = array('action'=> 'post', 'class' => 'w3-container', 'id' => 'equipment_form');
     $frm_opn = form_open($form_action, $form_attributes);
@@ -45,17 +38,23 @@
       'type' => 'submit',
       'class' => 'w3-right w3-teal w3-button'
     );
-    if(is_array($form_fields)){
+    if(is_array($where_fields)){
       echo $frm_opn;
-      echo $this->html_builders->build_grid($this->html_builders->build_form($form_fields, $select_data, (array)$update_data));
+      echo '<h5><b>Search By:</b><h5>';
+      echo $this->html_builders->build_grid($this->html_builders->build_form($where_fields, $select_data, (array)$update_data));
+    }
+    if(is_array($group_fields)){
+      echo '<h5><b>Group By:</b><h5>';
+      echo $this->html_builders->build_grid($this->html_builders->build_form($group_fields, $select_data, (array)$update_data));
     }        
     ?>
     <div class="w3-row">
-      <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
+      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom">
       </div>
-      <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom"></div>
-      <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom w3-margin-top">
-          <?php echo form_button($button_data, 'Submit'); ?>
+      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
+      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
+      <div class="w3-col w3-m3 w3-center-align w3-margin-right w3-margin-bottom w3-margin-top">
+        <?php echo form_button($button_data, 'Submit'); ?>
       </div>
     </div>
     <?php
@@ -68,16 +67,27 @@
   </div>
   <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
   <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>
+  <script src='<?php echo base_url();?>assets/js_lib/jquery-3.4.1.min.js'></script>
+  <script src='<?php echo base_url();?>assets/js_lib/zebra_datepicker.min.js'></script>
+  <link rel='stylesheet' href='<?php echo base_url();?>assets/css_lib/theme.default.css'>
+  <script type='text/javascript' src='<?php echo base_url();?>assets/js_lib/jquery.tablesorter.js'></script>
+  <script type='text/javascript' src='<?php echo base_url();?>assets/js_lib/jquery.tablesorter.widgets.js'></script>
   <script>
-  /*
-  <?php /*foreach($form_fields as $field => $properties){ 
-      if($properties[2] == 'date'){    
-  ?>
-      $('#<?php echo $field; ?>').Zebra_DatePicker({
-          format: 'M d, Y'
-      });
-  <?php }}*/ ?>
-  */
+    $(document).ready(function(){
+        $("#viewRecords").tablesorter({
+            cssDisabled: "disabled",
+            widthFixed: true,
+            widgets: ["zebra", "filter"],
+            widgetOptions: {
+                filter_reset: '.reset',
+                // set to false because it is difficult to determine if a filtered
+                // row is already showing when looking at ranges
+                filter_searchFiltered: false
+            }
+        });
+        $("#viewRecords").addClass('w3-table');
+    });
+    
   </script>
 </body>
 </html>

@@ -19,7 +19,8 @@ class Format_data {
         continue;
       $header[] = ucwords(str_replace('_', ' ', $key));
     }
-    $table_rows[] = $header;    
+    $table_rows['header'] = $header; 
+    $table_rows['values'] = array();   
     foreach($table_data as $record){  
       $values = array();
       if(isset($action)){
@@ -39,18 +40,44 @@ class Format_data {
               continue;
             $url .= $url_param.'='.$record->$value_param.'&';
           }
-          $values[] = '<a href="'.$url.'" 
-          target="'.$target.'" class="w3-btn '.$colors[$i].'">'.$op['label'].'</a>';
+          $values[] = array('properties' => '','value' => '<a href="'.$url.'" 
+          target="'.$target.'" class="w3-btn '.$colors[$i].'">'.$op['label'].'</a>');
           $i++;
         }
       }
       foreach($record as $field_name => $field_value){
         if(strpos($field_name, 'id') !== false)
           continue;
-        $values[] = $field_value;
+        $prop = '';
+        if(is_numeric($field_value)){
+          $prop = 'class="w3-right-align"';
+          $field_value = $this->ind_numbr_format($field_value);
+        }          
+        $values[] = array('value' => $field_value, 'properties' => $prop);
       }      
-      $table_rows[] = $values;
+      $table_rows['values'][] = $values;
     }
     return $table_rows;
+  }
+
+  function ind_numbr_format($number){    	
+    $decimal = (string)($number - floor($number));
+    $numbr = floor($number);
+    $length = strlen($numbr);
+    $delimiter = '';
+    $numbr = strrev($numbr);
+    for($i=0;$i<$length;$i++){
+      if(( $i==3 || ($i>3 && ($i-1)%2==0) )&& $i!=$length){
+        $delimiter .=',';
+      }
+      $delimiter .=$numbr[$i];
+    }
+    $result = strrev($delimiter);
+    $decimal = preg_replace("/0\./i", ".", $decimal);
+    $decimal = substr($decimal, 0, 3);
+    if( $decimal != '0'){
+      $result = $result.$decimal;
+    }
+    return $result;
   }
 }

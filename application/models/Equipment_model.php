@@ -4,7 +4,7 @@ class Equipment_model extends CI_Model {
   private $equipment_form_fields = array(
     'equipment_id'	=> array('', 'input', 'hidden'),
     'equipment_type_id'	=> array('Equipment Type', 'select', 'equipment_type_id', 'equipment_type'),
-    'equipment_procurement_type_id' => array('Procurement type', 'select', 'equipment_procurement_type_id', 'procurement_type'),
+    'equipment_procurement_type_id' => array('Procurement type', 'select', 'equipment_procurement_type_id', 'procurment_type'),
     'manufacturer_id'	=> array('Manufacturer', 'select', 'vendor_id', 'vendor_name'),
     'eq_name' => array('Equipment Name', 'input', 'text'),
     'model' => array('Model', 'input', 'text'),
@@ -74,44 +74,102 @@ class Equipment_model extends CI_Model {
     return $rslts[0];
   }
 
-/*
-  function get_summary_filter(){
-    $report_group_id = '1';
-    $this->db->select("*")
-      ->from('report_group')
-      ->where('report_group.report_group_id', $report_group_id)
-      ->order_by('report_group_id', 'ASC');
-    $qry = $this->db->get();
-    $rslts = array();
-    $rslts[] = $qry->result();
-    $this->db->select("*")
-      ->from('report_subgroup')
-      ->where('report_subgroup.report_group_id', $report_group_id)
-      ->order_by('report_group_id', 'ASC');
-    $qry = $this->db->get();
-    $rslts = array();
-    $rslts[] = $qry->result();
-    $this->db->select("*")
-      ->from('report_where')
-      ->where('report_where.report_group_id', $report_group_id)
-      ->order_by('report_group_id', 'ASC');
-    $qry = $this->db->get();
-    $rslts = array();
-    $rslts[] = $qry->result();
-    return $rslts; 
-  }
-*/
-
-  function get_summary_filter(){
-    $filters = array();
+  function get_where_filter(){
     $filters['equipment_type_id'] = $this->equipment_form_fields['equipment_type_id'];
     $filters['donor_id'] = $this->equipment_form_fields['donor_id'];
     $filters['place_id'] = array('Place', 'select', 'place_id', 'place');
-    $filters['cost'] = $this->equipment_form_fields['cost'];
+    $filters['cost'] = $this->equipment_form_fields['cost'];    
+    $filters['journal_from_date'] = array('Journal From Date', 'input', 'date');
+    $filters['journal_to_date'] = array('Journal To Date', 'input', 'date');
     return $filters;
   }
 
+  function get_group_filter(){
+    $filters = array();
+    $filters['group'] = array('Grouping', 'select', 'setting_query_filter_field_id', 'label');
+    $filters['sub_group'] = array('Sub Grouping', 'select', 'setting_query_filter_field_id', 'label');
+    //$filters['date_on'] = array('Apply Date On', 'select', 'setting_query_filter_field_id', 'label');
+    return $filters;
+  }
+
+  function get_grouping(){
+    $this->db->select('*')
+      ->from('setting_query_filter_field')
+      ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
+      ->where('setting_query_filter.query_filter_name', 'welcome_page')
+      ->where('filter_type', 'group');
+    $qry = $this->db->get();
+    $rslts = $qry->result();
+    return $rslts;
+  }
+
+  function get_subgrouping(){
+    $this->db->select('*')
+      ->from('setting_query_filter_field')
+      ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
+      ->where('setting_query_filter.query_filter_name', 'welcome_page');
+      //->where('filter_type', 'subgroup');
+    $qry = $this->db->get();
+    $rslts = $qry->result();
+    return $rslts;
+  }
+
   function equipment_summary(){
+    // Join fields
+    $this->db->select('*')
+      ->from('setting_query_filter_field')
+      ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
+      ->where('setting_query_filter.query_filter_name', 'welcome_page');
+    $qry = $this->db->get();
+    $mstrs = $qry->result();
+    
+    // Grouping fields
+    $group_filter_id = false;
+    if($this->input->post('group'))
+      $group_filter_id = $this->input->post('group');
+    $group_record = '';
+    if($group_filter_id){
+      $this->db->select('*')
+        ->from('setting_query_filter_field')
+        ->where('setting_query_filter_field_id', $group_filter_id);
+      $qry = $this->db->get();
+      $group_record = $qry->result();
+      $group_record = $group_record[0];
+    } else {
+      $this->db->select('*')
+        ->from('setting_query_filter_field')
+        ->where('default_filter', 'yes');
+      $qry = $this->db->get();
+      $group_record = $qry->result();
+      $group_record = $group_record[0];
+    }
+
+    $sub_group_id = false;
+    $sub_group_by_label = '';
+    $sub_group_by_field = '';
+    if($this->input->post('sub_group'))
+      $sub_group_id = $this->input->post('sub_group');
+    if($sub_group_id){
+      $this->db->select('*')
+        ->from('setting_query_filter_field')
+        ->where('setting_query_filter_field_id', $sub_group_id);
+      $qry = $this->db->get();
+      $sub_group_record = $qry->result();
+      $sub_group_record = $group_record[0];
+      $this->db->group_by($sub_group_record->master_table_name.'.'.$sub_group_record->master_field_name);
+      $sub_group_by_label = $sub_group_record->master_label_field;
+      $sub_group_by_field = $sub_group_record->master_table_name.'.'.$sub_group_record->master_label_field;
+      $this->db->select($sub_group_by_field.' AS '.$sub_group_by_label);
+      $this->db->group_by($sub_group_by_field);
+    }
+
+    // journal_form_date, journal_to_date
+    if($this->input->post('journal_from_date') && $this->input->post('journal_to_date')){
+      $from_date = $this->input->post('journal_from_date');
+      $to_date = $this->input->post('journal_to_date');
+      $this->db->where("equipment.journal_date BETWEEN '$from_date' AND '$to_date'");
+    }
+
     $count_by_data = array();
     $where_data = array();
     foreach($this->equipment_form_fields as $field => $props){
@@ -124,17 +182,24 @@ class Equipment_model extends CI_Model {
     }
     if(!empty($this->input->post('place_id') != ''))
       $this->db->where('place.place_id', $this->input->post('place_id'));
-    
-    $this->db->select("COUNT(*) as All_Equipment, SUM(cost) Equipment_Cost")
+
+    foreach($mstrs as $mstr){
+      $table_name = $mstr->table_name;
+      $field_name = $mstr->field_name;
+      $master_table = $mstr->master_table_name;
+      $master_field_name = $mstr->master_field_name;
+      $label = str_replace(" ","_", $mstr->label);
+      $join_string = $table_name."."."$field_name = $label".".".$master_field_name;
+      $this->db->join("$master_table AS $label", $join_string, 'left');
+    }
+
+    $group_by_label = str_replace(" ","_", $group_record->label);
+    $group_by_field = $group_by_label.'.'.$group_record->master_label_field;
+    $this->db->select($group_by_field.' AS '.$group_by_label);
+    $this->db->group_by($group_by_field);
+
+    $this->db->select("COUNT(*) as All_Equipment, SUM(cost) as Equipment_Cost")
       ->from('equipment')
-      ->join('equipment_type', 'equipment_type.equipment_type_id = equipment.equipment_type_id', 'left')
-      ->join('equipment_procurement_type', 'equipment_procurement_type.equipment_procurement_type_id  = equipment.equipment_procurement_type_id', 'left')
-      ->join('vendor as manufac', 'manufac.vendor_id = equipment.manufacturer_id', 'left')
-      ->join('vendor as supp', 'supp.vendor_id = equipment.supplier_id', 'left')
-      ->join('vendor as proc', 'proc.vendor_id = equipment.procured_by_id', 'left')
-      ->join('vendor as donor', 'donor.vendor_id = equipment.donor_id', 'left')
-      ->join('journal_type', 'journal_type.journal_type_id = equipment.journal_type_id', 'left')
-      ->join('equipment_functional_status', 'equipment_functional_status.functional_status_id = equipment.functional_status_id', 'left')
       ->join('equipment_location_log', 'equipment_location_log.equipment_id = equipment.equipment_id', 'left')
       ->join('place', 'equipment_location_log.place_id = place.place_id', 'left')
       ->order_by('eq_name', 'ASC');

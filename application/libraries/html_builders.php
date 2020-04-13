@@ -133,4 +133,25 @@ class HTML_builders {
     }
     return $urls;
   }
+
+  // Header, Values{properties, value}
+  function build_table($data){
+    $table = '<table id="viewRecords" class="">';
+    $table .= '<thead><tr><th>#</th>';
+    foreach($data['header'] as $hdr){
+      $table .= "<th>$hdr</th>";
+    }
+    $table .= '</tr></thead><tbody>';
+    $i = 1;
+    foreach($data['values'] as $rows){
+      $table .= "<tr><td>$i</td>";
+      foreach($rows as $row){
+        $table .= "<td ".$row['properties'].">".$row['value']."</td>";
+      }
+      $table .= '</tr>';
+      $i++;
+    }
+    $table .= '</tbody></table>';
+    return $table;
+  }
 }

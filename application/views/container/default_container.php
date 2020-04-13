@@ -15,6 +15,7 @@
         width: 100%;
     }
 </style>
+
 <body>
     <!-- Header -->
     <div class="w3-bar w3-border w3-light-grey navbar">
@@ -60,11 +61,11 @@
         }        
         ?>
         <div class="w3-row">
-            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom">
-            </div>
-            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom"></div>
-            <div class="w3-col w3-quarter w3-margin-right w3-margin-bottom w3-margin-top">
-                <?php echo form_button($button_data, 'Save'); ?>
+            <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
+            <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
+            <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
+            <div class="w3-col w3-m3 w3-center-align w3-margin-right w3-margin-bottom w3-margin-top">
+                <?php echo form_button($button_data, 'Submit'); ?>
             </div>
         </div>
         <?php
@@ -72,23 +73,31 @@
         ?>
     </div>
     <!-- Table -->
-    <div style="margin-left:15%;overflow:auto;" class="w3-container">
+    <div style="margin-left:15%;overflow:auto;" class="w3-container w3-padding">
         <?php $this->load->view('common/pagination'); ?>
         <?php $this->load->view('common/table'); ?>
         <?php $this->load->view('common/pagination'); ?>
     </div>
-    <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
-    <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>
+    <script src='<?php echo base_url();?>assets/js_lib/jquery-3.4.1.min.js'></script>
+    <script src='<?php echo base_url();?>assets/js_lib/zebra_datepicker.min.js'></script>
+    <link rel='stylesheet' href='<?php echo base_url();?>assets/css_lib/theme.default.css'>
+    <script type='text/javascript' src='<?php echo base_url();?>assets/js_lib/jquery.tablesorter.js'></script>
+    <script type='text/javascript' src='<?php echo base_url();?>assets/js_lib/jquery.tablesorter.widgets.js'></script>
     <script>
-    /*
-    <?php /*foreach($form_fields as $field => $properties){ 
-        if($properties[2] == 'date'){    
-    ?>
-        $('#<?php echo $field; ?>').Zebra_DatePicker({
-            format: 'M d, Y'
+        $(document).ready(function(){
+            $("#viewRecords").tablesorter({
+                cssDisabled: "disabled",
+                widthFixed: true,
+                widgets: ["zebra", "filter"],
+                widgetOptions: {
+                    filter_reset: '.reset',
+                    // set to false because it is difficult to determine if a filtered
+                    // row is already showing when looking at ranges
+                    filter_searchFiltered: false
+                }
+            });
+            $("#viewRecords").addClass('w3-table');
         });
-    <?php }}*/ ?>
-    */
     </script>
 </body>
 </html>

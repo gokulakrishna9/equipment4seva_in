@@ -19,10 +19,13 @@ class Welcome extends CI_Controller {
 		$this->load->model('place_model');
 		$this->load->model('vendor_model');
 		$this->data['select_data']['place_id'] = $this->place_model->get_place();
+		$this->data['select_data']['group'] = $this->equipment_model->get_grouping();
+		$this->data['select_data']['sub_group'] = $this->equipment_model->get_subgrouping();
 		$this->data['tabel_data'] = $this->equipment_model->equipment_summary();
 		$this->data['select_data']['equipment_type_id'] = $this->equipment_type_model->get_equipment_type();
 		$this->data['select_data']['donor_id'] = $this->vendor_model->get_vendor();
-		$this->data['form_fields'] = $this->equipment_model->get_summary_filter();
+		$this->data['where_fields'] = $this->equipment_model->get_where_filter();
+		$this->data['group_fields'] = $this->equipment_model->get_group_filter();
 		$this->data['key_field'] = '';
 		/*
 		$this->data['table_operator'][] = array(			

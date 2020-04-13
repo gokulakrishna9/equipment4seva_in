@@ -24,7 +24,7 @@ $button_data = array(
 <?php echo $frm_opn; ?>
 <span class='w3-margin w3-large'>All Records: <?php echo $total_rows; ?></span>
 <span class='w3-margin'><?php echo $this->html_builders->build_pagination($config); ?></span>
-<input type="text" value='50' size='2' name='per_page' value=''><?php echo $per_page; ?></input>
+<input type="text" size='2' name='per_page' value='<?php echo $per_page; ?>'></input>
 <?php echo form_button($button_data, 'Per Page'); ?>
 <?php echo $frm_cls; ?>
 </div>
