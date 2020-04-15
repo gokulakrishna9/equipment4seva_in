@@ -8,12 +8,17 @@ class Welcome extends CI_Controller {
     } else {
       $this->index();
       return;
-    }
+		}
 	}
 	
 	public function index(){
+		$this->load_defaults();
+		$this->load->view('container/reports_container', $this->data);		
+	}
+
+	private function load_defaults(){
 		$this->data['header'] = 'equipment';
-		$this->data['form_action'] = 'welcome/index';
+		$this->data['form_action'] = 'welcome/equipment_summary';
 		$this->load->model('equipment_model');
 		$this->load->model('equipment_type_model');
 		$this->load->model('place_model');
@@ -27,14 +32,7 @@ class Welcome extends CI_Controller {
 		$this->data['where_fields'] = $this->equipment_model->get_where_filter();
 		$this->data['group_fields'] = $this->equipment_model->get_group_filter();
 		$this->data['key_field'] = '';
-		/*
-		$this->data['table_operator'][] = array(			
-			'label' => 'View Detailed',
-      'controller_method' => 'equipment/get_equipment',
-			'equipment_id' => 'equipment_id'
-		);
-		*/
-		$this->load->view('container/reports_container', $this->data);		
+		$this->data['update_data'] = $this->equipment_model->welcome_default_filter_values();
 	}
 
 	public function login()
@@ -60,7 +58,9 @@ class Welcome extends CI_Controller {
 	}
 
 	public function equipment_summary(){
-
+		$this->load_defaults();
+		$this->data['update_data'] = $this->input->post(NULL, TRUE);
+		$this->load->view('container/reports_container', $this->data);		
 	}
 
 	public function logout(){

@@ -80,4 +80,9 @@ class Format_data {
     }
     return $result;
   }
+
+  function grouping_component($grouping, $data){
+    
+  }
+
 }

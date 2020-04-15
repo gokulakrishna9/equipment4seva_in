@@ -63,6 +63,7 @@
   </div>
   <!-- Table -->
   <div style="overflow:auto;" class="w3-container">
+    <?php $this->load->view('common/group_table'); ?>
     <?php $this->load->view('common/table'); ?>
   </div>
   <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>

@@ -136,6 +136,8 @@ class HTML_builders {
 
   // Header, Values{properties, value}
   function build_table($data){
+    if(!isset($data))
+      return;
     $table = '<table id="viewRecords" class="">';
     $table .= '<thead><tr><th>#</th>';
     foreach($data['header'] as $hdr){
@@ -153,5 +155,9 @@ class HTML_builders {
     }
     $table .= '</tbody></table>';
     return $table;
+  }
+
+  function build_grouping_table($data){
+    //var_dump($data);
   }
 }

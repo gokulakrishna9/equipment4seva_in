@@ -14,7 +14,7 @@ class Equipment_model extends CI_Model {
     'donor_id' => array('Donor', 'select', 'vendor_id', 'vendor_name'),
     'procured_by_id' => array('Procured By', 'select', 'vendor_id', 'vendor_name'),
     'purchase_order_date' => array('Order Date', 'input', 'date'),
-    'cost' => array('Cost', 'input', 'number'),
+    'cost' => array('Cost', 'input', 'text'),
     'supplier_id' => array('Supplier', 'select', 'vendor_id', 'vendor_name'),
     'invoice_number' => array('Invoice Number', 'input', 'text'),
     'invoice_date' => array('Invoice Date', 'input', 'date'),
@@ -41,7 +41,7 @@ class Equipment_model extends CI_Model {
       $offset = ($this->session->page_number - 1) * $limit;
     // https://stackoverflow.com/questions/12102200/get-records-with-max-value-for-each-group-of-grouped-sql-results
     $eq_loc_log_str = "(SELECT * FROM (SELECT equipment_id, place.place, vendor_name as custodian, equipment_location_log.delivery_date as delivery_date, address FROM equipment_location_log LEFT JOIN vendor ON equipment_location_log.vendor_id = vendor.vendor_id LEFT JOIN place ON equipment_location_log.place_id = place.place_id ORDER BY delivery_date desc) as ordrd GROUP BY delivery_date) as eq_loc_log";
-    $this->db->select("equipment.equipment_id, equipment_type, eq_name, model, manufac.vendor_name as manufacturer, supp.vendor_name as supplier, serial_number, mac_address, asset_number, donor.vendor_name as donor, proc.vendor_name as procured_by, equipment_procurement_type.procurment_type, FORMAT(cost, 2, 'en_IN') as cost_INR, invoice_number,  DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date, DATE_FORMAT(invoice_date, '%d %b %Y') as invoice_date, DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date , DATE_FORMAT(supply_date, '%d %b %Y') as supply_date, DATE_FORMAT(installation_date, '%d %b %Y') as installation_date, DATE_FORMAT(warranty_start_date, '%d %b %Y') as warranty_start_date, DATE_FORMAT(warranty_end_date, '%d %b %Y') as warranty_end_date, working_status, journal_type, journal_number, DATE_FORMAT(journal_date, '%d %b %Y') as journal_date, address, place, custodian as user, DATE_FORMAT(delivery_date, '%d %b %Y') as delivery_date, equipment.equipment_id as equipment_ID")
+    $this->db->select("equipment.equipment_id, equipment_type, eq_name, model, manufac.vendor_name as manufacturer, supp.vendor_name as supplier, serial_number, mac_address, asset_number, donor.vendor_name as donor, proc.vendor_name as procured_by, equipment_procurement_type.procurment_type, FORMAT(cost, 2, 'en_IN') as cost_INR, invoice_number,  DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date, DATE_FORMAT(invoice_date, '%d %b %Y') as invoice_date, DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date , DATE_FORMAT(supply_date, '%d %b %Y') as supply_date, DATE_FORMAT(installation_date, '%d %b %Y') as installation_date, DATE_FORMAT(warranty_start_date, '%d %b %Y') as warranty_start_date, DATE_FORMAT(warranty_end_date, '%d %b %Y') as warranty_end_date, journal_type, journal_number, DATE_FORMAT(journal_date, '%d %b %Y') as journal_date, address, place, custodian as user, DATE_FORMAT(delivery_date, '%d %b %Y') as delivery_date, working_status, equipment.equipment_id as equipment_ID")
       ->from('equipment')
       ->join('equipment_type', 'equipment_type.equipment_type_id = equipment.equipment_type_id', 'left')
       ->join('equipment_procurement_type', 'equipment_procurement_type.equipment_procurement_type_id  = equipment.equipment_procurement_type_id', 'left')
@@ -114,53 +114,74 @@ class Equipment_model extends CI_Model {
     return $rslts;
   }
 
+  function welcome_default_filter_values(){
+    $this->db->select('setting_query_filter_field_id')
+      ->from('setting_query_filter_field')
+      ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
+      ->where('setting_query_filter.query_filter_name', 'welcome_page')
+      ->where('setting_query_filter_field.default_filter', 'yes');
+    $qry = $this->db->get();
+    $rslts = $qry->result();
+    $rslts = $rslts[0]->setting_query_filter_field_id;
+    return (object)array('group' => $rslts);
+  }
+
   function equipment_summary(){
-    // Join fields
+    // Grouping fields
+    $group_filter_id = false;
+    $mstrs = array();
+    if($this->input->post('group')){
+      $group_filter_id = $this->input->post('group');
+    }
+    else{
+      $group_filter_id = $this->welcome_default_filter_values()->group;
+    }
+    // Subgrouping fields
+    $sub_group_id = false;
+    if($this->input->post('sub_group')){
+      $sub_group_id = $this->input->post('sub_group');
+    }
+      
+    // Group On
     $this->db->select('*')
       ->from('setting_query_filter_field')
       ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
-      ->where('setting_query_filter.query_filter_name', 'welcome_page');
+      ->where('setting_query_filter.query_filter_name', 'welcome_page')
+      ->where('setting_query_filter_field.setting_query_filter_field_id', $group_filter_id);
+    if($sub_group_id){
+      $this->db->or_where('setting_query_filter_field.setting_query_filter_field_id', $sub_group_id);
+    }
     $qry = $this->db->get();
     $mstrs = $qry->result();
-    
-    // Grouping fields
-    $group_filter_id = false;
-    if($this->input->post('group'))
-      $group_filter_id = $this->input->post('group');
+    // Apply Group By
     $group_record = '';
-    if($group_filter_id){
-      $this->db->select('*')
-        ->from('setting_query_filter_field')
-        ->where('setting_query_filter_field_id', $group_filter_id);
-      $qry = $this->db->get();
-      $group_record = $qry->result();
-      $group_record = $group_record[0];
-    } else {
-      $this->db->select('*')
-        ->from('setting_query_filter_field')
-        ->where('default_filter', 'yes');
-      $qry = $this->db->get();
-      $group_record = $qry->result();
-      $group_record = $group_record[0];
-    }
+    $this->db->select('*')
+      ->from('setting_query_filter_field')
+      ->where('setting_query_filter_field_id', $group_filter_id);
+    $qry = $this->db->get();
+    $group_record = $qry->result();
+    $group_record = $group_record[0];  
+    $group_by_label = str_replace(" ","_", $group_record->label);
+    $group_by_field = $group_by_label.'.'.$group_record->master_label_field;
+    $group_by_select = $group_by_field.' AS '.$group_by_label;
+    $group_by_str =  $group_by_field;
 
-    $sub_group_id = false;
+    // Apply Sub group by
     $sub_group_by_label = '';
-    $sub_group_by_field = '';
-    if($this->input->post('sub_group'))
-      $sub_group_id = $this->input->post('sub_group');
+    $sub_group_by_select = '';
+    $sub_group_by_str = '';
+    
     if($sub_group_id){
       $this->db->select('*')
         ->from('setting_query_filter_field')
         ->where('setting_query_filter_field_id', $sub_group_id);
       $qry = $this->db->get();
       $sub_group_record = $qry->result();
-      $sub_group_record = $group_record[0];
-      $this->db->group_by($sub_group_record->master_table_name.'.'.$sub_group_record->master_field_name);
-      $sub_group_by_label = $sub_group_record->master_label_field;
-      $sub_group_by_field = $sub_group_record->master_table_name.'.'.$sub_group_record->master_label_field;
-      $this->db->select($sub_group_by_field.' AS '.$sub_group_by_label);
-      $this->db->group_by($sub_group_by_field);
+      $sub_group_record = $sub_group_record[0];  
+      $sub_group_by_label = str_replace(" ","_", $sub_group_record->label);
+      $sub_group_by_field = $sub_group_by_label.'.'.$sub_group_record->master_label_field;
+      $sub_group_by_select = $sub_group_by_field.' AS '.$sub_group_by_label;
+      $sub_group_by_str =  $sub_group_by_field;
     }
 
     // journal_form_date, journal_to_date
@@ -169,7 +190,8 @@ class Equipment_model extends CI_Model {
       $to_date = $this->input->post('journal_to_date');
       $this->db->where("equipment.journal_date BETWEEN '$from_date' AND '$to_date'");
     }
-
+    
+    // All where conditions
     $count_by_data = array();
     $where_data = array();
     foreach($this->equipment_form_fields as $field => $props){
@@ -182,7 +204,7 @@ class Equipment_model extends CI_Model {
     }
     if(!empty($this->input->post('place_id') != ''))
       $this->db->where('place.place_id', $this->input->post('place_id'));
-
+    // All the join conditions
     foreach($mstrs as $mstr){
       $table_name = $mstr->table_name;
       $field_name = $mstr->field_name;
@@ -192,19 +214,17 @@ class Equipment_model extends CI_Model {
       $join_string = $table_name."."."$field_name = $label".".".$master_field_name;
       $this->db->join("$master_table AS $label", $join_string, 'left');
     }
-
-    $group_by_label = str_replace(" ","_", $group_record->label);
-    $group_by_field = $group_by_label.'.'.$group_record->master_label_field;
-    $this->db->select($group_by_field.' AS '.$group_by_label);
-    $this->db->group_by($group_by_field);
-
-    $this->db->select("COUNT(*) as All_Equipment, SUM(cost) as Equipment_Cost")
+    // Final query
+    $this->db->select("$group_by_select, $sub_group_by_select, COUNT(*) as All_Equipment, SUM(cost) as Equipment_Cost")
       ->from('equipment')
       ->join('equipment_location_log', 'equipment_location_log.equipment_id = equipment.equipment_id', 'left')
       ->join('place', 'equipment_location_log.place_id = place.place_id', 'left')
-      ->order_by('eq_name', 'ASC');
+      ->order_by('eq_name', 'ASC')
+      ->group_by($group_by_str)
+      ->group_by($sub_group_by_str);
     $qry = $this->db->get();
     $rslts = $qry->result();
+    
     return $rslts;
   }
 

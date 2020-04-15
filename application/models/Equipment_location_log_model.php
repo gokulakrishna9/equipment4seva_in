@@ -27,6 +27,7 @@ class equipment_location_log_model extends CI_Model {
       ->join('equipment', 'equipment.equipment_id = equipment_location_log.equipment_id', 'left')
       ->join('vendor', 'vendor.vendor_id = equipment_location_log.vendor_id', 'left')
       ->join('place', 'place.place_id = equipment_location_log.place_id', 'left')
+      ->order_by('delivery_date', 'DESC')
       ->order_by('address', 'ASC')
       ->limit($limit, $offset);
     $qry = $this->db->get();
