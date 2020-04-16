@@ -157,7 +157,13 @@ class HTML_builders {
     return $table;
   }
 
-  function build_grouping_table($data){
-    //var_dump($data);
+  function build_grouping_table($grouping_data){
+    var_dump($grouping_data);
+    $group_label = $grouping_data['group_label'];
+    $sub_group_labels = $grouping_data['sub_group_labels'];
+    // Groups root to leaves
+    
+
+    return $table_data;
   }
 }

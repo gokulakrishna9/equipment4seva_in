@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Format_data {
-  public function format_table_data($table_data, $action){
+  public function format_table_data($table_data, $action = null){
     $table_rows = array();
     $header = array();
     if(!$table_data)
@@ -81,8 +81,41 @@ class Format_data {
     return $result;
   }
 
-  function grouping_component($grouping, $data){
-    
+  function grouping_component($data){
+    //group_label, sub_group_labels
+    $group_label = $data['group_label'];
+    $sub_group_labels = $data['sub_group_labels'];
+    $records = $this->empty_all_but_first_col($data['data'], $group_label);
+    if(sizeof($sub_group_labels) != 0){
+      foreach($sub_group_labels as $sub_label){
+        $records = $this->empty_all_but_first_col($records, $sub_label);
+      }      
+    }
+    $table_data = $this->format_table_data($records);
+    return $table_data;
+  }
+
+  // Change this to indexes ?
+  function empty_all_but_first_col($data, $column_key){
+    foreach($data as $record){
+      $unique_groups[] = $record->$column_key;
+    }
+    $unique_groups = array_unique($unique_groups);
+    $records = array();
+    foreach($unique_groups as $group){
+      $first = 0;
+      foreach($data as $record){
+        if($record->$column_key == $group && $first == 0){
+          $first++;
+          $records[] = $record;
+          continue;
+        } else if($record->$column_key == $group){
+          $record->$column_key = '';
+          $records[] = $record;
+        }
+      }  
+    }
+    return $records;
   }
 
 }

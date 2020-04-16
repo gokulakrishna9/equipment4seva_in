@@ -64,7 +64,6 @@
   <!-- Table -->
   <div style="overflow:auto;" class="w3-container">
     <?php $this->load->view('common/group_table'); ?>
-    <?php $this->load->view('common/table'); ?>
   </div>
   <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
   <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>
@@ -75,20 +74,19 @@
   <script type='text/javascript' src='<?php echo base_url();?>assets/js_lib/jquery.tablesorter.widgets.js'></script>
   <script>
     $(document).ready(function(){
-        $("#viewRecords").tablesorter({
-            cssDisabled: "disabled",
-            widthFixed: true,
-            widgets: ["zebra", "filter"],
-            widgetOptions: {
-                filter_reset: '.reset',
-                // set to false because it is difficult to determine if a filtered
-                // row is already showing when looking at ranges
-                filter_searchFiltered: false
-            }
-        });
-        $("#viewRecords").addClass('w3-table');
-    });
-    
+      $("#viewRecords").tablesorter({
+        cssDisabled: "disabled",
+        widthFixed: true,
+        widgets: ["zebra", "filter"],
+        widgetOptions: {
+          filter_reset: '.reset',
+          // set to false because it is difficult to determine if a filtered
+          // row is already showing when looking at ranges
+          filter_searchFiltered: false
+        }
+      });
+      $("#viewRecords").addClass('w3-table');
+    });    
   </script>
 </body>
 </html>

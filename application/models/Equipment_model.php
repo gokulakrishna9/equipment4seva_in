@@ -219,12 +219,19 @@ class Equipment_model extends CI_Model {
       ->from('equipment')
       ->join('equipment_location_log', 'equipment_location_log.equipment_id = equipment.equipment_id', 'left')
       ->join('place', 'equipment_location_log.place_id = place.place_id', 'left')
-      ->order_by('eq_name', 'ASC')
+      ->order_by($group_by_str, 'ASC')
+      ->order_by($sub_group_by_str, 'ASC')
       ->group_by($group_by_str)
       ->group_by($sub_group_by_str);
     $qry = $this->db->get();
     $rslts = $qry->result();
-    
+    // Recursive order n assuming group by 2 groups
+    $rslts = array(
+      'group_label' => $group_by_label,
+      'numeric' => array('All_Equipment', 'Equipment_Cost'), 
+      'data' => $rslts
+    );
+    $rslts['sub_group_labels'] = $sub_group_by_label == '' ? array() : array($sub_group_by_label);
     return $rslts;
   }
 
