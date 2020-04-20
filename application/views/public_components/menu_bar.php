@@ -1,6 +1,7 @@
 <?php 
   $header_list = array(
-    'Equipment'=> 'welcome/index'
+    'Equipment' => 'welcome/index',
+    'Eq Detailed' => 'welcome/eq_detailed'
   ); 
   $login = 'welcome/login';
 ?>

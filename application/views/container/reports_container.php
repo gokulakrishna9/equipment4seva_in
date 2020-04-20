@@ -22,9 +22,6 @@
     </div>
   </div>
   <div class="w3-bar w3-margin w3-padding"></div>
-  <div  class="w3-bar w3-margin w3-padding">
-    &nbsp;
-  </div>
   <!-- Form -->
   <div  class="w3-container w3-padding">
     <?php
@@ -43,17 +40,17 @@
       echo '<h5><b>Search By:</b><h5>';
       echo $this->html_builders->build_grid($this->html_builders->build_form($where_fields, $select_data, (array)$update_data));
     }
-    if(is_array($group_fields)){
+    if(!isset($detailed) && is_array($group_fields)){
       echo '<h5><b>Group By:</b><h5>';
       echo $this->html_builders->build_grid($this->html_builders->build_form($group_fields, $select_data, (array)$update_data));
-    }        
+    }    
     ?>
     <div class="w3-row">
-      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom">
+      <div class="w3-col w3-m3">
       </div>
-      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
-      <div class="w3-col w3-m3 w3-margin-right w3-margin-bottom"></div>
-      <div class="w3-col w3-m3 w3-center-align w3-margin-right w3-margin-bottom w3-margin-top">
+      <div class="w3-col w3-m3"></div>
+      <div class="w3-col w3-m3"></div>
+      <div class="w3-col w3-m3 w3-center-align">
         <?php echo form_button($button_data, 'Submit'); ?>
       </div>
     </div>
@@ -63,7 +60,16 @@
   </div>
   <!-- Table -->
   <div style="overflow:auto;" class="w3-container">
-    <?php $this->load->view('common/group_table'); ?>
+    <?php 
+      if(isset($detailed)){
+    ?>    
+    <?php $this->load->view('common/pagination'); ?>
+    <?php $this->load->view('common/table'); ?>
+    <?php $this->load->view('common/pagination'); ?>    
+    <?php }
+      else
+        $this->load->view('common/group_table'); 
+    ?>
   </div>
   <script src='<?php echo base_url();?>assets\js_lib\jquery-3.4.1.min.js'></script>
   <script src='<?php echo base_url();?>assets\js_lib\zebra_datepicker.min.js'></script>

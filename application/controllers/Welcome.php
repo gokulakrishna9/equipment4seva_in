@@ -12,7 +12,11 @@ class Welcome extends CI_Controller {
 	}
 	
 	public function index(){
-		$this->load_defaults();
+		$this->load_defaults();		
+		$this->data['table_operator']['0'] = array(
+      'label' => 'View',
+      'controller_method' => 'eq_detailed'
+    );
 		$this->load->view('container/reports_container', $this->data);		
 	}
 
@@ -59,9 +63,42 @@ class Welcome extends CI_Controller {
 
 	public function equipment_summary(){
 		$this->load_defaults();
+		$this->data['table_operator']['0'] = array(
+      'label' => 'View',
+      'controller_method' => 'eq_detailed'
+    );
 		$this->data['update_data'] = $this->input->post(NULL, TRUE);
 		$this->load->view('container/reports_container', $this->data);		
 	}
+
+	public function eq_detailed(){
+		$this->load_defaults();
+		$this->data['total_rows'] = $this->equipment_model->equipment_detailed_count();          // Pagination
+		$this->data['tabel_data'] = $this->equipment_model->eq_detail_public();
+		$this->data['detailed'] = true;
+		$this->set_pagination_data();
+		$this->load->view('container/reports_container', $this->data);
+	}
+
+	private function set_pagination_data(){
+		$this->data['pagination_action'] = 'welcome/eq_detailed';
+    if($this->input->get('page_number')){
+      $this->session->set_userdata('page_number', $this->input->get('page_number'));
+      $this->data['page_number'] = $this->input->get('page_number');
+    }
+    else{
+      $this->session->set_userdata('page_number', 1);
+      $this->data['page_number'] = 1;
+    }
+    if($this->input->post('per_page')){
+      $this->session->set_userdata('per_page', $this->input->post('per_page'));
+      $this->data['per_page'] = $this->input->post('per_page');
+    }
+    else{
+      $this->session->set_userdata('per_page', 50);
+      $this->data['per_page'] = 50;
+    }
+  }
 
 	public function logout(){
 		$this->session->sess_destroy();
