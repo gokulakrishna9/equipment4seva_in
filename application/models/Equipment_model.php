@@ -34,10 +34,48 @@ class Equipment_model extends CI_Model {
   }
 
   function equipment_detailed_count(){
-    if($this->input->get(NULL, TRUE)){
-      $where_conditions = $this->input->get(NULL, TRUE);
-      foreach($where_conditions as $column => $value)
-        $this->db->where($column, $value);
+    // Grouping fields
+    $group_filter_id = false;
+    $mstrs = array();
+    if($this->input->get('group_filter_id')){
+      $group_filter_id = $this->input->get('group_filter_id');
+    }
+    else{
+      $group_filter_id = $this->welcome_default_filter_values()->group;
+    }
+    // Subgrouping fields
+    $sub_group_id = false;
+    if($this->input->get('sub_group_filter_id')){
+      $sub_group_id = $this->input->get('sub_group_filter_id');
+    }    
+      
+    // Apply group condition as where condition
+    $this->db->select('*')
+      ->from('setting_query_filter_field')
+      ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
+      ->where('setting_query_filter.query_filter_name', 'welcome_page')
+      ->where('setting_query_filter_field.setting_query_filter_field_id', $group_filter_id);
+    if($sub_group_id){
+      $this->db->or_where('setting_query_filter_field.setting_query_filter_field_id', $sub_group_id);
+    }
+    $qry = $this->db->get();
+    $mstrs = $qry->result();
+    
+    // All where conditions
+    foreach($mstrs as $mstr){
+      if($mstr->setting_query_filter_field_id == $group_filter_id){
+        $group_label = $this->input->get('group_label');
+        $group_label = strtolower(str_replace('_', ' ', $group_label));
+        $mstrLabel = strtolower(str_replace(' ', '_', $mstr->label));
+        $this->db->where('LOWER('.$mstrLabel.'.'.$mstr->master_label_field.')', $group_label);
+      } else if($mstr->setting_query_filter_field_id == $sub_group_id){
+        if(!$this->input->get('sub_group1'))
+          continue;
+        $group_label = $this->input->get('sub_group1');
+        $group_label = str_replace('_', ' ', $group_label);
+        $mstrLabel = strtolower(str_replace(' ', '_', $mstr->label));
+        $this->db->where('LOWER('.$mstrLabel.'.'.$mstr->master_label_field.')', $group_label);
+      }
     }
     $this->db->select("COUNT(*) as records")
       ->from('equipment')
@@ -87,28 +125,23 @@ class Equipment_model extends CI_Model {
       $offset = 0;
     else 
       $offset = ($this->session->page_number - 1) * $limit;
-    if($this->input->get(NULL, TRUE)){
-      $where_conditions = $this->input->get(NULL, TRUE);
-      foreach($where_conditions as $column => $value)
-        $this->db->where('LOWER('.$column.')', 'LOWER('.str_replace("_"," ", $value).')');
-    }
 
     // Grouping fields
     $group_filter_id = false;
     $mstrs = array();
-    if($this->input->post('group')){
-      $group_filter_id = $this->input->post('group');
+    if($this->input->get('group_filter_id')){
+      $group_filter_id = $this->input->get('group_filter_id');
     }
     else{
       $group_filter_id = $this->welcome_default_filter_values()->group;
     }
     // Subgrouping fields
     $sub_group_id = false;
-    if($this->input->post('sub_group')){
-      $sub_group_id = $this->input->post('sub_group');
-    }
+    if($this->input->get('sub_group_filter_id')){
+      $sub_group_id = $this->input->get('sub_group_filter_id');
+    }    
       
-    // Group On
+    // Apply group condition as where condition
     $this->db->select('*')
       ->from('setting_query_filter_field')
       ->join('setting_query_filter', 'setting_query_filter.setting_query_filter_id = setting_query_filter_field.setting_query_filter_id')
@@ -119,7 +152,35 @@ class Equipment_model extends CI_Model {
     }
     $qry = $this->db->get();
     $mstrs = $qry->result();
-
+    
+    // All where conditions
+    foreach($mstrs as $mstr){
+      if($mstr->setting_query_filter_field_id == $group_filter_id){
+        $group_label = $this->input->get('group_label');
+        $group_label = strtolower(str_replace('_', ' ', $group_label));
+        $mstrLabel = strtolower(str_replace(' ', '_', $mstr->label));
+        $this->db->where('LOWER('.$mstrLabel.'.'.$mstr->master_label_field.')', $group_label);
+      } else if($mstr->setting_query_filter_field_id == $sub_group_id){
+        if(!$this->input->get('sub_group1'))
+          continue;
+        $group_label = $this->input->get('sub_group1');
+        $group_label = strtolower(str_replace('_', ' ', $group_label));
+        $mstrLabel = strtolower(str_replace(' ', '_', $mstr->label));
+        $this->db->where('LOWER('.$mstrLabel.'.'.$mstr->master_label_field.')', $group_label);
+      }
+    }
+    $count_by_data = array();
+    $where_data = array();
+    foreach($this->equipment_form_fields as $field => $props){
+      if(empty($this->input->post($field)))
+        continue;      
+      $count_by_data[$field] = $this->input->post($field);              
+    }
+    foreach($count_by_data as $field => $value){
+      $this->db->where('equipment.'."$field", $value);
+    }
+    if(!empty($this->input->post('place_id') != ''))
+      $this->db->where('place.place_id', $this->input->post('place_id'));
     // https://stackoverflow.com/questions/12102200/get-records-with-max-value-for-each-group-of-grouped-sql-results
     $eq_loc_log_str = "(SELECT * FROM (SELECT equipment_id, place.place, vendor_name as custodian, equipment_location_log.delivery_date as delivery_date, address FROM equipment_location_log LEFT JOIN vendor ON equipment_location_log.vendor_id = vendor.vendor_id LEFT JOIN place ON equipment_location_log.place_id = place.place_id ORDER BY delivery_date desc) as ordrd GROUP BY delivery_date) as eq_loc_log";
     $this->db->select("equipment.equipment_id, equipment_type, eq_name, model, manufac.vendor_name as manufacturer, supp.vendor_name as supplier, serial_number, mac_address, asset_number, donor.vendor_name as donor, proc.vendor_name as procured_by, equipment_procurement_type.procurment_type, FORMAT(cost, 2, 'en_IN') as cost_INR, invoice_number,  DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date, DATE_FORMAT(invoice_date, '%d %b %Y') as invoice_date, DATE_FORMAT(purchase_order_date, '%d %b %Y') as purchase_order_date , DATE_FORMAT(supply_date, '%d %b %Y') as supply_date, DATE_FORMAT(installation_date, '%d %b %Y') as installation_date, DATE_FORMAT(warranty_start_date, '%d %b %Y') as warranty_start_date, DATE_FORMAT(warranty_end_date, '%d %b %Y') as warranty_end_date, journal_type, journal_number, DATE_FORMAT(journal_date, '%d %b %Y') as journal_date, address, place, custodian as user, DATE_FORMAT(delivery_date, '%d %b %Y') as delivery_date, working_status, equipment.equipment_id as equipment_ID")

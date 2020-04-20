@@ -40,7 +40,7 @@
       echo '<h5><b>Search By:</b><h5>';
       echo $this->html_builders->build_grid($this->html_builders->build_form($where_fields, $select_data, (array)$update_data));
     }
-    if(!isset($detailed) && is_array($group_fields)){
+    if(is_array($group_fields)){
       echo '<h5><b>Group By:</b><h5>';
       echo $this->html_builders->build_grid($this->html_builders->build_form($group_fields, $select_data, (array)$update_data));
     }    

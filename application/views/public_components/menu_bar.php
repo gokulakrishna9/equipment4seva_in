@@ -5,7 +5,7 @@
   ); 
   $login = 'welcome/login';
 ?>
-<a href='<?php echo base_url(); ?>' class='w3-bar-item w3-button w3-light-green'>Equipment For Seva</span>
+<a href='#' class='w3-bar-item w3-button w3-light-green'>Equipment For Seva</span>
 <?php 
   $route = explode('/', $header);
   foreach($header_list as $label => $hdr){

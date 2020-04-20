@@ -76,6 +76,7 @@ class Welcome extends CI_Controller {
 		$this->data['total_rows'] = $this->equipment_model->equipment_detailed_count();          // Pagination
 		$this->data['tabel_data'] = $this->equipment_model->eq_detail_public();
 		$this->data['detailed'] = true;
+		$this->data['update_data'] = $this->input->post(NULL, TRUE);
 		$this->set_pagination_data();
 		$this->load->view('container/reports_container', $this->data);
 	}
